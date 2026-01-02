@@ -6,7 +6,7 @@ import { AppSidebar } from "@/components/shadcn/app-sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import { ThemeProvider } from "@/components/shadcn/theme-provider"
 import ThemeToggle from '../components/themeToggle';
-import { NavGroup } from "@/interfaces/Navbar.interface";
+import { NavGroup } from "@/interfaces/navbar.interface";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
       >
         <ThemeProvider
           attribute="class"
