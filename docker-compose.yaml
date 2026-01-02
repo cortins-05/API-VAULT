@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  api-vault-db:
+    image: postgres:16.3
+    container_name: api-vault-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: api_vault
+    volumes:
+      - ./postgres:/var/lib/postgresql/data

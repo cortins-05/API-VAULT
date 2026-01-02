@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SupportLevel {
+  GOOD
+  AVERAGE
+  BAD
+}
+
+model Provider {
+  id           Int           @id @default(autoincrement())
+  name         String
+  website      String?
+  docsUrl      String?
+  supportLevel SupportLevel?
+  notes        String?
+  createdAt    DateTime      @default(now())
+
+  apis         Api[]
+}
+
+model Api {
+  id          Int       @id @default(autoincrement())
+  name        String
+  providerId  Int
+  description String?
+  deprecated  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  provider    Provider  @relation(fields: [providerId], references: [id])
+  memories    ApiMemory[]
+  evaluations ApiEvaluation[]
+  flags       ApiFlag[]
+  contexts    ApiContext[]
+}
+
+enum MemoryType {
+  BUG
+  INCONSISTENCY
+  UNDOCUMENTED_BEHAVIOR
+  SILENT_CHANGE
+  OTHER
+}
+
+model ApiMemory {
+  id        Int       @id @default(autoincrement())
+  apiId     Int
+  type      MemoryType
+  content   String
+  project   String?
+  occurredAt DateTime?
+  createdAt DateTime  @default(now())
+
+  api       Api       @relation(fields: [apiId], references: [id])
+}
+
+model ApiEvaluation {
+  id           Int      @id @default(autoincrement())
+  apiId        Int
+  stability    Int      // 1–5
+  costValue    Int      // 1–5
+  performance  Int      // 1–5
+  support      Int      // 1–5
+  notes        String?
+  createdAt    DateTime @default(now())
+
+  api          Api      @relation(fields: [apiId], references: [id])
+}
+
+enum FlagLevel {
+  BLACK
+  GRAY
+  WARNING
+}
+
+model ApiFlag {
+  id        Int      @id @default(autoincrement())
+  apiId     Int
+  level     FlagLevel
+  reason    String
+  createdAt DateTime @default(now())
+
+  api       Api      @relation(fields: [apiId], references: [id])
+}
+
+enum ContextType {
+  RECOMMENDED
+  AVOID
+}
+
+model ApiContext {
+  id        Int         @id @default(autoincrement())
+  apiId     Int
+  type      ContextType
+  context   String
+
+  api       Api         @relation(fields: [apiId], references: [id])
+}
