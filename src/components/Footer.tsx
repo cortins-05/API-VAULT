@@ -4,6 +4,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import Link from 'next/link';
 import {
   HoverCard,
   HoverCardContent,
@@ -14,7 +15,7 @@ export function Footer() {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Button variant="link">@cortins-05</Button>
+        <Button variant="link"><Link href='https://github.com/cortins-05'>@cortins-05</Link></Button>
       </HoverCardTrigger>
       <HoverCardContent className="w-90 mr-3">
         <div className="flex justify-between gap-4">

@@ -26,22 +26,30 @@ export const metadata: Metadata = {
 
 const data:NavGroup[] = [
   {
-    title: "Menu Colapsable",
+    title: "Gestor Apis",
     url: "",
     items: [
       {
-        title: "SubItem 1",
+        title: "All",
+        url: "/gestor-apis/all"
+      },
+      {
+        title: "Apis Relevantes",
         url: ""
       },
       {
-        title: "SubItem 2",
+        title: "Búsqueda Global + Filtros",
         url: ""
-      }
+      },
+      {
+        title: "Charts",
+        url: ""
+      },
     ]
   },
   {
-    title: "Gestor Apis",
-    url: "/gestor-apis"
+    title: "Actions",
+    url: ""
   }
 ]
 
