@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/shadcn/theme-provider"
 import ThemeToggle from '../components/themeToggle';
 import { NavGroup } from "@/interfaces/navbar.interface";
 import { Footer } from '../components/Footer';
+import { Clapperboard, Hammer, ChartNoAxesGantt, Zap } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ const data:NavGroup[] = [
   {
     title: "Gestor Apis",
     url: "",
+    icon: <ChartNoAxesGantt/> ,
     items: [
       {
         title: "All",
@@ -49,7 +51,20 @@ const data:NavGroup[] = [
   },
   {
     title: "Actions",
-    url: ""
+    url: "",
+    icon: <Clapperboard/>,
+    items:[
+      {
+        title: "CREATE IA",
+        url: "/actions/createIA",
+        icon: <Zap color="lab(76.3898% 14.5258 98.4589)" />
+      },
+      {
+        title: "CREATE MANUALLY",
+        url: "/actions/createManually",
+        icon: <Hammer color="red" />
+      }
+    ]
   }
 ]
 

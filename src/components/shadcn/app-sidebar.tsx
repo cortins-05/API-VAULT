@@ -58,12 +58,12 @@ export function AppSidebar({ data, ...props }: AppSidebarProps) {
                 className="group/collapsible"
               >
                 <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
+                  <CollapsibleTrigger asChild className="font-bold">
                     {
                       item.items && item.items.length > 0
                       ?
                       <SidebarMenuButton>
-                      {item.title}{" "}
+                      {item.icon ?? item.icon}  {item.title}{" "}
                       {
                         !!item.items ? (
                           <>
@@ -88,8 +88,9 @@ export function AppSidebar({ data, ...props }: AppSidebarProps) {
                             <SidebarMenuSubButton
                               asChild
                               isActive={false}
+                              className="w-full p-6"
                             >
-                              <a href={item.url}>{item.title}</a>
+                              <Link href={item.url}>{item.icon ?? item.icon}{item.title}</Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}

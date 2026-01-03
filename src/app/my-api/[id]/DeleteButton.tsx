@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { deleteApiAction } from '@/actions/delete-api'
+import { deleteApiAction } from '@/actions/prisma/delete-api'
 
 export function DeleteApiButton({ id }: { id: number }) {
   return (

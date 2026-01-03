@@ -13,11 +13,20 @@ const ai = new GoogleGenAI({
 /* =======================
    Schema FINAL
 ======================= */
-export const ApiDraftSchema = z.object({
+const ApiDraftSchema = z.object({
+  // API fields
   name: z.string(),
+  description: z.string().nullable(),
+  deprecated: z.boolean(),
+  
+  // Provider fields
   provider: z.string().nullable(),
   website: z.string().url().nullable(),
   docsUrl: z.string().url(),
+  supportLevel: z.enum(["GOOD", "AVERAGE", "BAD"]).nullable(),
+  notes: z.string().nullable(),
+  
+  // Metadata fields
   apiType: z.enum(["REST", "GraphQL", "gRPC", "WebSocket", "Unknown"]),
   authMethods: z.array(z.string()),
   hasOfficialSdk: z.array(z.string()),
@@ -28,7 +37,6 @@ export const ApiDraftSchema = z.object({
     "SUBSCRIPTION",
     "UNKNOWN",
   ]),
-  shortTechnicalSummary: z.string(),
   confidence: z.number().min(0).max(1),
 });
 
@@ -58,7 +66,7 @@ ROLE:
 You are a senior API analyst and software architect.
 
 MISSION:
-Extract factual, verifiable technical metadata from an official API documentation.
+Extract factual, verifiable technical metadata from an official API documentation to populate the Provider and Api database models.
 
 STRICT RULES:
 - Use ONLY the provided documentation URL as the source of truth.
@@ -74,25 +82,42 @@ API name: ${name}
 Official documentation URL: ${docsUrl}
 
 FIELDS DEFINITION:
-- apiType: choose ONLY if explicitly stated (REST, GraphQL, gRPC, WebSocket)
-- authMethods: only authentication methods clearly documented
-- hasOfficialSdk: list ONLY officially supported SDK languages
+
+API FIELDS:
+- name: API name as documented
+- description: Clear, concise description of what the API does (from official docs)
+- deprecated: boolean (true only if explicitly marked as deprecated in official docs)
+
+PROVIDER FIELDS:
+- provider: Company or organization name that owns/maintains the API
+- website: Official website URL of the provider
+- docsUrl: Official documentation URL (same as input)
+- supportLevel: Choose from (GOOD: responsive support, AVERAGE: standard support, BAD: minimal/no support), or null if not documented
+- notes: Any relevant additional information about the provider or API (compatibility notes, requirements, etc.)
+
+METADATA FIELDS:
+- apiType: choose ONLY if explicitly stated (REST, GraphQL, gRPC, WebSocket, Unknown)
+- authMethods: only authentication methods clearly documented (e.g., API Key, OAuth 2.0, JWT)
+- hasOfficialSdk: list ONLY officially supported SDK languages/platforms
 - pricingModel: choose UNKNOWN unless pricing is clearly documented
-- confidence: number between 0 and 1 representing certainty of correctness
+- confidence: number between 0 and 1 representing certainty of correctness for extracted data
 
 OUTPUT:
 Return EXACTLY this JSON schema and nothing else:
 
 {
   "name": string,
+  "description": string | null,
+  "deprecated": boolean,
   "provider": string | null,
   "website": string | null,
   "docsUrl": string,
+  "supportLevel": "GOOD" | "AVERAGE" | "BAD" | null,
+  "notes": string | null,
   "apiType": "REST" | "GraphQL" | "gRPC" | "WebSocket" | "Unknown",
   "authMethods": string[],
   "hasOfficialSdk": string[],
   "pricingModel": "FREE" | "FREEMIUM" | "PAY_PER_USE" | "SUBSCRIPTION" | "UNKNOWN",
-  "shortTechnicalSummary": string,
   "confidence": number
 }
 `;
@@ -127,7 +152,7 @@ export async function ingestApiWithGemini(
   /* === Reintento automático (repair) === */
   if (!parsed) {
     const repair = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       contents: [
         {
           role: "user",
