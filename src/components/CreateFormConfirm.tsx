@@ -1,3 +1,5 @@
+"use client"
+
 import { ApiDraft, FormData } from "@/interfaces/gemini.interface";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,15 +12,17 @@ import { createApiAction } from "@/actions/prisma/create-api";
 import { ReloadGuard } from "@/helpers/BeforeUnload";
 import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
 import { redirect } from "next/navigation";
+import { updateApi } from "@/actions/prisma/update-api";
 
 interface Props {
   data: ApiDraft;
   IA: boolean;
+  update?: number;
 }
 
-export default function FormConfirm({ data,IA }: Props) {
+export default function FormConfirm({ data,IA,update }: Props) {
 
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const [form, setForm] = useState<FormData>({
     name: data.name || "",
@@ -42,10 +46,17 @@ export default function FormConfirm({ data,IA }: Props) {
   async function submit(e: FormEvent) {
     e.preventDefault();
     console.log(form);
-    await createApiAction(form);
-    setOpen(true);
+    if(update){
+        await updateApi(form,update).then(()=>{setOpen(true)});
+    }else{
+        await createApiAction(form).then(()=>{setOpen(true)});
+    }
     setTimeout(() => {
-      redirect("/gestor-apis/all");
+      if(update){
+        redirect(`/my-api/${update}`);
+      }else{
+        redirect("/gestor-apis/all");
+      }
     }, 3000);
   }
 
@@ -355,13 +366,19 @@ export default function FormConfirm({ data,IA }: Props) {
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>API creada</AlertDialogTitle>
+            <AlertDialogTitle>API {update ? 'actualizada' : 'creada'}</AlertDialogTitle>
             <AlertDialogDescription>
               Se guardó correctamente. Redirigiendo al gestor de APIs...
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => {redirect("/gestor-apis/all")}}>Aceptar</AlertDialogAction>
+            <AlertDialogAction onClick={() => {
+                if(update){
+                    redirect(`/my-api/${update}`);
+                }else{
+                    redirect("/gestor-apis/all")
+                }
+            }}>Aceptar</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

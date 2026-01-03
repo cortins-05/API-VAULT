@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { DeleteApiButton } from './DeleteButton';
 import { redirect } from "next/navigation";
 import { ApiKeyDisplay } from "./ApiKeyDisplay";
+import { UpdateKeyButton } from '../../../components/UpdateKeyButton';
 
 interface RatingProps {
   label: string;
@@ -79,15 +80,18 @@ export default async function MyApiPage({
             Creado: {format(api!.createdAt, "dd MMMM yyyy")}
           </p>
 
-          <div className="flex gap-5">
-            <Link href={`my-api/edit/${id}`} className="top-0 right-0">
-                <Button variant={"outline"} >
-                    Editar
-                </Button>
+          <div className="flex gap-5 my-7">
+            <Link href={`/actions/edit/${id}`} className="top-0 right-0">
+              <Button variant={"outline"} >
+                Editar
+              </Button>
             </Link>
             
             <DeleteApiButton id={id} />
+
           </div>
+
+          <UpdateKeyButton apiId={id} />
 
         </div>
 
