@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 const data:NavGroup[] = [
   {
-    title: "Item 1",
+    title: "Menu Colapsable",
     url: "",
     items: [
       {
@@ -39,8 +39,8 @@ const data:NavGroup[] = [
     ]
   },
   {
-    title: "Item 2",
-    url: ""
+    title: "Gestor Apis",
+    url: "/gestor-apis"
   }
 ]
 
@@ -75,7 +75,7 @@ export default function RootLayout({
                     <ThemeToggle />
                   </div>
                 </header>
-                <div className="flex flex-1 flex-col gap-4 p-10">
+                <div className="flex flex-1">
                   {children}
                 </div>
               </SidebarInset>
