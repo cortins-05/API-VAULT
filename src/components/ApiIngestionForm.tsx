@@ -1,83 +1,50 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { FormEvent, useState } from "react";
 import { ingestApiWithGemini } from "@/actions/ai/ingest-api";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export function ApiIngestForm() {
-  const [name, setName] = useState("");
+  const [apiName, setApiName] = useState("");
   const [docsUrl, setDocsUrl] = useState("");
-  const [result, setResult] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
 
-  function handleSubmit(e: React.FormEvent) {
+  function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setError(null);
-    setResult(null);
-
-    startTransition(async () => {
-      try {
-        const data = await ingestApiWithGemini(name, docsUrl);
-        setResult(data);
-      } catch (err: any) {
-        setError(err.message ?? "Unexpected error");
-      }
-    });
+    console.log({ apiName, docsUrl });
+    // Aquí puedes llamar a ingestApiWithGemini con los datos
   }
 
   return (
-    <div className="max-w-xl space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium">
-            API name
-          </label>
-          <input
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full rounded border px-3 py-2"
-            placeholder="Stripe API"
-          />
-        </div>
+    <form onSubmit={onSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="api-name">API Name</Label>
+        <Input
+          id="api-name"
+          type="text"
+          placeholder="Ingresa el nombre de la API"
+          value={apiName}
+          onChange={(e) => setApiName(e.target.value)}
+          required
+        />
+      </div>
 
-        <div>
-          <label className="block text-sm font-medium">
-            Documentation URL
-          </label>
-          <input
-            required
-            type="url"
-            value={docsUrl}
-            onChange={(e) => setDocsUrl(e.target.value)}
-            className="w-full rounded border px-3 py-2"
-            placeholder="https://docs.stripe.com"
-          />
-          <p className="text-xs text-muted-foreground">
-            Usa la URL oficial de la documentación para máxima precisión
-          </p>
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="docs-url">Docs URL</Label>
+        <Input
+          id="docs-url"
+          type="url"
+          placeholder="https://ejemplo.com/docs"
+          value={docsUrl}
+          onChange={(e) => setDocsUrl(e.target.value)}
+          required
+        />
+      </div>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded bg-black px-4 py-2 text-white disabled:opacity-50"
-        >
-          🤖 Auto-rellenar desde documentación
-        </button>
-      </form>
-
-      {error && (
-        <div className="rounded border border-red-500 bg-red-50 p-3 text-sm">
-          {error}
-        </div>
-      )}
-
-      {result && (
-        <pre className="rounded bg-neutral-900 p-4 text-xs text-white overflow-auto">
-{JSON.stringify(result, null, 2)}
-        </pre>
-      )}
-    </div>
+      <Button type="submit" className="w-full">
+        Ingresar API
+      </Button>
+    </form>
   );
 }

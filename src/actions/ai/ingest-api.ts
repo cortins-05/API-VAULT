@@ -13,7 +13,7 @@ const ai = new GoogleGenAI({
 /* =======================
    Schema FINAL
 ======================= */
-const ApiDraftSchema = z.object({
+export const ApiDraftSchema = z.object({
   name: z.string(),
   provider: z.string().nullable(),
   website: z.string().url().nullable(),
