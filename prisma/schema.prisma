@@ -34,6 +34,7 @@ model Provider {
 model Api {
   id          Int       @id @default(autoincrement())
   name        String
+  key         String?
   providerId  Int
   description String?
   deprecated  Boolean   @default(false)

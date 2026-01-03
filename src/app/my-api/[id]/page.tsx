@@ -3,11 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { prisma } from "@/lib/prisma";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink, Key } from "lucide-react";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { DeleteApiButton } from './DeleteButton';
 import { redirect } from "next/navigation";
+import { ApiKeyDisplay } from "./ApiKeyDisplay";
 
 interface RatingProps {
   label: string;
@@ -99,8 +100,22 @@ export default async function MyApiPage({
             <CardHeader>
               <CardTitle>Resumen de la API</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <p className="text-muted-foreground">{api?.description}</p>
+              
+              {/* API Key Section */}
+              {api?.key && (
+                <>
+                  <Separator />
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-sm font-semibold">
+                      <Key className="w-4 h-4" />
+                      <span>API Key</span>
+                    </div>
+                    <ApiKeyDisplay apiKey={api.key} />
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
 

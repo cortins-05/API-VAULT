@@ -5,6 +5,7 @@
 export interface ApiDraft {
   // API fields
   name: string;
+  key?: string;
   description: string | null;
   deprecated: boolean;
 
@@ -59,6 +60,7 @@ export enum PricingModel {
 export interface FormData {
   /* API */
   name: string;
+  key: string;
   description: string;
   deprecated: boolean;
 

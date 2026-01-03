@@ -22,6 +22,7 @@ export default function FormConfirm({ data,IA }: Props) {
 
   const [form, setForm] = useState<FormData>({
     name: data.name || "",
+    key: data.key || "",
     description: data.description || "",
     deprecated: data.deprecated || false,
 
@@ -124,6 +125,18 @@ export default function FormConfirm({ data,IA }: Props) {
                   value={form.name}
                   onChange={handleChange}
                   placeholder="API Name"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="key">API Key (Optional)</Label>
+                <Input
+                  id="key"
+                  name="key"
+                  type="text"
+                  value={form.key}
+                  onChange={handleChange}
+                  placeholder="Your API key"
                 />
               </div>
 

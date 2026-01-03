@@ -6,6 +6,7 @@ export async function createApiAction(data: FormData) {
     try {
         const api = {
             name: data.name,
+            key: data.key || null,
             description: data.description,
             deprecated: data.deprecated,
         };
