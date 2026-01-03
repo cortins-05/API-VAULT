@@ -63,7 +63,7 @@ model ApiMemory {
   occurredAt DateTime?
   createdAt DateTime  @default(now())
 
-  api       Api       @relation(fields: [apiId], references: [id])
+  api       Api       @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }
 
 model ApiEvaluation {
@@ -76,7 +76,7 @@ model ApiEvaluation {
   notes        String?
   createdAt    DateTime @default(now())
 
-  api          Api      @relation(fields: [apiId], references: [id])
+  api          Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }
 
 enum FlagLevel {
@@ -92,7 +92,7 @@ model ApiFlag {
   reason    String
   createdAt DateTime @default(now())
 
-  api       Api      @relation(fields: [apiId], references: [id])
+  api       Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }
 
 enum ContextType {
@@ -106,5 +106,5 @@ model ApiContext {
   type      ContextType
   context   String
 
-  api       Api         @relation(fields: [apiId], references: [id])
+  api       Api         @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }

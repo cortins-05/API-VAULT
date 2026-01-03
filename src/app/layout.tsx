@@ -7,6 +7,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { ThemeProvider } from "@/components/shadcn/theme-provider"
 import ThemeToggle from '../components/themeToggle';
 import { NavGroup } from "@/interfaces/navbar.interface";
+import { Footer } from '../components/Footer';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -75,8 +76,13 @@ export default function RootLayout({
                     <ThemeToggle />
                   </div>
                 </header>
-                <div className="flex flex-1">
-                  {children}
+                <div className="flex flex-col flex-1">
+                  <div className="flex-1">
+                    {children}
+                  </div>
+                  <footer className="w-full flex justify-end shrink-0 px-3">
+                    <Footer />
+                  </footer>
                 </div>
               </SidebarInset>
           </SidebarProvider>
