@@ -3,11 +3,13 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Button } from '@/components/ui/button';
-import { Check, Pen, X, BadgePlus } from 'lucide-react';
+import { Check, Pen, X, BadgePlus, Trash } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { updateEvaluation } from "@/actions/prisma/update-api";
 import { Eval } from "@/interfaces/prisma.interface";
+import { createEvaluation } from "@/actions/prisma/create-api";
+import { deleteEvaluationAction } from "@/actions/prisma/delete-api";
 
 interface Props {
     evaluations: Eval[];
@@ -74,6 +76,7 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
         setPerformance(eva.performance);
         setSupport(eva.support);
         setStability(eva.stability);
+        setNotes("");
     }
 
     function handleCancel(){
@@ -83,12 +86,27 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
         setEditingId(null);
     };
 
+    async function deleteEvaluation(id:number){
+        await deleteEvaluationAction(id);
+        router.refresh();
+    }
+
     async function handleAction(eva:Eval){
+        const evaluacion:Eval = {
+            id: eva.id,
+            costValue: cost,
+            performance: performance,
+            stability: stability,
+            support: support,
+            notes: notes,
+            createdAt: eva.createdAt,
+            apiId: Number(apiId)
+        }
         if(editingId==280305){
-            // await createCard();
+            await createEvaluation(evaluacion);
         }else{
             if(!editingId) return;
-            await updateEvaluation(eva); //TODO FIJATE
+            await updateEvaluation(evaluacion);
             router.refresh();
         }
         router.refresh();
@@ -164,7 +182,11 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
                             </Button>
                         </>
                         :
-                        <Button variant="ghost" onClick={()=>{handleEdit(eva)}}> <Pen/> </Button>
+                        <div className="flex gap-3">
+                            <Button variant="ghost" onClick={()=>{handleEdit(eva)}}> <Pen/> </Button>
+                            <Button variant="ghost" onClick={()=>deleteEvaluation(eva.id)} > <Trash /> </Button>
+                        </div>
+
                     }
                 </div>
                 

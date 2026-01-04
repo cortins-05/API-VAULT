@@ -1,5 +1,6 @@
 'use server'
 import { FormData } from '@/interfaces/gemini.interface'
+import { Eval } from '@/interfaces/prisma.interface';
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache';
 
@@ -18,7 +19,7 @@ export async function createApiAction(data: FormData) {
             docsUrl: data.docsUrl,
             supportLevel: data.supportLevel === "" ? null : data.supportLevel,
             notes: data.notes || null,
-            apis: {
+            api: {
                 create: api,
             },
         };
@@ -45,6 +46,26 @@ export async function createMemoryCard(apiId:number,content:string,proyect:strin
         revalidatePath(`/my-api/${apiId}`);
         return true;
     }catch (err){
+        throw err;
+    }
+}
+
+export async function createEvaluation(evaluation:Eval){
+    try{
+        await prisma.apiEvaluation.create(
+            {
+                data: {
+                    costValue: evaluation.costValue,
+                    performance: evaluation.performance,
+                    stability: evaluation.stability,
+                    support: evaluation.support,
+                    notes: evaluation.notes,
+                    apiId: evaluation.apiId
+                }
+            }
+        )
+    }catch (err){
+        console.log("Se ha producido un error al crear la evaluacion.");
         throw err;
     }
 }

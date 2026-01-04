@@ -2,7 +2,6 @@
 import { FormData } from '@/interfaces/gemini.interface';
 import { Eval } from '@/interfaces/prisma.interface';
 import { prisma } from '@/lib/prisma'
-import { revalidatePath } from 'next/cache';
 
 interface PropsUpdateKey {
     id: number;

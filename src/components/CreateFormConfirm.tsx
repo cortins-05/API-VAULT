@@ -55,7 +55,7 @@ export default function FormConfirm({ data,IA,update }: Props) {
       if(update){
         redirect(`/my-api/${update}`);
       }else{
-        redirect("/gestor-apis/all");
+        redirect("/gestor-apis");
       }
     }, 3000);
   }
@@ -376,7 +376,7 @@ export default function FormConfirm({ data,IA,update }: Props) {
                 if(update){
                     redirect(`/my-api/${update}`);
                 }else{
-                    redirect("/gestor-apis/all")
+                    redirect("/gestor-apis")
                 }
             }}>Aceptar</AlertDialogAction>
           </AlertDialogFooter>
