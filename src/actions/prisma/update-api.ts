@@ -1,5 +1,6 @@
 'use server'
 import { FormData } from '@/interfaces/gemini.interface';
+import { Eval } from '@/interfaces/prisma.interface';
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache';
 
@@ -96,14 +97,18 @@ export async function updateMemoryCard(id:number,content:string,proyect:string){
     }
 }
 
-export async function createMemoryCard(apiId:number,content:string,proyect:string){
+export async function updateEvaluation(datos:Eval) {
     try{
-        await prisma.apiMemory.create(
-            {
-                data:{content,project:proyect,type:"OTHER",apiId:Number(apiId)}
+        await prisma.apiEvaluation.update({
+            where:{id:Number(datos.id)},
+            data:{
+                stability:datos.stability,
+                costValue:datos.costValue,
+                performance:datos.performance,
+                support:datos.support,
+                notes:datos.notes
             }
-        );        
-        revalidatePath(`/my-api/${apiId}`);
+        });
         return true;
     }catch (err){
         throw err;

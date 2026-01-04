@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Pencil, Check, X, BadgePlus, Trash } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { ApiMemory } from "../../../../../generated/prisma/client";
-import { createMemoryCard, updateMemoryCard } from "@/actions/prisma/update-api";
+import { updateMemoryCard } from "@/actions/prisma/update-api";
+import { createMemoryCard } from "@/actions/prisma/create-api";
 import { useRouter } from "next/navigation";
 import { deleteMemoryAction } from "@/actions/prisma/delete-api";
 

@@ -11,28 +11,7 @@ import { redirect } from "next/navigation";
 import { ApiKeyDisplay } from "./components/ApiKeyDisplay";
 import { UpdateKeyButton } from '../../../components/UpdateKeyButton';
 import { MemoriesCard } from "./components/MemoriesCard";
-
-interface RatingProps {
-  label: string;
-  value: number;
-}
-
-function RatingBar({ label, value }: RatingProps) {
-  const percentage = (value / 5) * 100;
-  const color = value <= 2 ? "bg-red-500" : value <= 3 ? "bg-yellow-500" : "bg-green-500";
-
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between text-sm">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-medium">{value}/5</span>
-      </div>
-      <div className="h-2 bg-secondary rounded-full overflow-hidden">
-        <div className={`h-full ${color} transition-all`} style={{ width: `${percentage}%` }} />
-      </div>
-    </div>
-  );
-}
+import EvaluationCard from './components/EvaluationsCard';
 
 export default async function MyApiPage({
   params,
@@ -197,41 +176,7 @@ export default async function MyApiPage({
           </Card>
 
           {/* Evaluations Card */}
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Evaluaciones</CardTitle>
-              <CardDescription>
-                {evaluation.length} evaluación(es)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {evaluation.length > 0 ? (
-                <div className="space-y-6">
-                  {evaluation.map((eva) => (
-                    <div key={eva.id} className="space-y-4 pb-6 border-b last:pb-0 last:border-0">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <RatingBar label="Costo" value={eva.costValue} />
-                        <RatingBar label="Rendimiento" value={eva.performance} />
-                        <RatingBar label="Estabilidad" value={eva.stability} />
-                        <RatingBar label="Soporte" value={eva.support} />
-                      </div>
-                      {eva.notes && (
-                        <div className="mt-4 p-3 bg-secondary/50 rounded-md">
-                          <p className="text-sm">
-                            <span className="font-semibold">Notas:</span> {eva.notes}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  No hay evaluaciones registradas
-                </p>
-              )}
-            </CardContent>
-          </Card>
+          <EvaluationCard evaluations={evaluation} apiId={id} />
 
           {/* Flags Card */}
           <Card className="lg:col-span-2">
