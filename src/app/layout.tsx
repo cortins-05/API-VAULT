@@ -37,12 +37,12 @@ const data:NavGroup[] = [
     icon: <Clapperboard/>,
     items:[
       {
-        title: "CREATE IA",
+        title: "IA CREATION",
         url: "/actions/createIA",
         icon: <Zap color="lab(76.3898% 14.5258 98.4589)" />
       },
       {
-        title: "CREATE MANUALLY",
+        title: "MANUAL CREATION",
         url: "/actions/createManually",
         icon: <Hammer color="red" />
       }
