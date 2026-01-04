@@ -355,7 +355,7 @@ export default function FormConfirm({ data,IA,update }: Props) {
         </div>
 
         <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline">
+          <Button type="button" variant="outline" onClick={()=>{redirect(`/my-api/${update}`)}}>
             Cancel
           </Button>
           <Button type="submit">

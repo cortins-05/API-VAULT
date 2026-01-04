@@ -1,6 +1,7 @@
 'use server'
 import { FormData } from '@/interfaces/gemini.interface';
 import { prisma } from '@/lib/prisma'
+import { revalidatePath } from 'next/cache';
 
 interface PropsUpdateKey {
     id: number;
@@ -75,5 +76,36 @@ export async function updateApi(data: FormData, id: number) {
     } catch (error) {
         console.error("Error updating api + provider", error);
         throw error;
+    }
+}
+
+export async function updateMemoryCard(id:number,content:string,proyect:string){
+    try{
+        await prisma.apiMemory.update(
+            {
+                where: {id:Number(id)},
+                data: {
+                    project:proyect,
+                    content:content
+                }
+            }
+        );        
+        return true;
+    }catch{
+        throw "Fallo al enviar la solicitud";
+    }
+}
+
+export async function createMemoryCard(apiId:number,content:string,proyect:string){
+    try{
+        await prisma.apiMemory.create(
+            {
+                data:{content,project:proyect,type:"OTHER",apiId:Number(apiId)}
+            }
+        );        
+        revalidatePath(`/my-api/${apiId}`);
+        return true;
+    }catch (err){
+        throw err;
     }
 }

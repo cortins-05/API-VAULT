@@ -28,14 +28,14 @@ model Provider {
   notes        String?
   createdAt    DateTime      @default(now())
 
-  apis         Api[]
+  api          Api?
 }
 
 model Api {
   id          Int       @id @default(autoincrement())
   name        String
   key         String?
-  providerId  Int
+  providerId  Int       @unique
   description String?
   deprecated  Boolean   @default(false)
   createdAt   DateTime  @default(now())

@@ -3,13 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { prisma } from "@/lib/prisma";
-import { ArrowRight, ExternalLink, Key } from "lucide-react";
+import { ExternalLink, Key } from "lucide-react";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
-import { DeleteApiButton } from './DeleteButton';
+import { DeleteApiButton } from './components/DeleteButton';
 import { redirect } from "next/navigation";
-import { ApiKeyDisplay } from "./ApiKeyDisplay";
+import { ApiKeyDisplay } from "./components/ApiKeyDisplay";
 import { UpdateKeyButton } from '../../../components/UpdateKeyButton';
+import { MemoriesCard } from "./components/MemoriesCard";
 
 interface RatingProps {
   label: string;
@@ -65,6 +66,7 @@ export default async function MyApiPage({
   const memories = await prisma.apiMemory.findMany({
     where: { apiId: Number(id) },
   });
+  
   const provider = await prisma.provider.findUnique({
     where: { id: (api?.providerId) },
   });
@@ -298,35 +300,7 @@ export default async function MyApiPage({
             </CardContent>
           </Card>
 
-          {/* Memories Card */}
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Memoria y Proyectos</CardTitle>
-              <CardDescription>{memories.length} elemento(s)</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {memories.length > 0 ? (
-                <div className="space-y-3">
-                  {memories.map((memory) => (
-                    <div
-                      key={memory.id}
-                      className="flex items-center gap-3 p-3 rounded-md bg-secondary/50"
-                    >
-                      <span className="font-medium text-sm flex-1 truncate">
-                        {memory.content}
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                      <Badge variant="outline">{memory.project}</Badge>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  No hay memorias registradas
-                </p>
-              )}
-            </CardContent>
-          </Card>
+          <MemoriesCard memories={memories} apiId={id} />
         </div>
       </div>
     </div>

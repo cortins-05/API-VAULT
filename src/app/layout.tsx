@@ -28,26 +28,8 @@ export const metadata: Metadata = {
 const data:NavGroup[] = [
   {
     title: "Gestor Apis",
-    url: "",
-    icon: <ChartNoAxesGantt/> ,
-    items: [
-      {
-        title: "All",
-        url: "/gestor-apis/all"
-      },
-      {
-        title: "Apis Relevantes",
-        url: ""
-      },
-      {
-        title: "Búsqueda Global + Filtros",
-        url: ""
-      },
-      {
-        title: "Charts",
-        url: ""
-      },
-    ]
+    url: "/gestor-apis",
+    icon: <ChartNoAxesGantt/> 
   },
   {
     title: "Actions",
