@@ -39,14 +39,14 @@ export function ApiIngestForm({onSend}:Props) {
     <div className="from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center px-4">
       <div className="w-full max-w-2xl space-y-6">
         {/* Header */}
-        <div className="text-center space-y-3 mb-8">
+        <div className="md:text-center space-y-3 mb-8">
           <div className="flex items-center justify-center gap-3">
             <Zap className="w-10 h-10 text-yellow-500" />
             <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent pb-2">
               API Ingestion
             </h1>
           </div>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-slate-600 text-center dark:text-slate-400">
             Extrae información de tu API automáticamente usando inteligencia artificial
           </p>
         </div>

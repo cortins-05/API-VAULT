@@ -68,7 +68,6 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
   }
 
   async function updateCard() {
-    console.log(editingId,editContent,editProject);
     await updateMemoryCard(editingId!,editContent,editProject).then(
       (exito) => {
         if(exito){
@@ -99,7 +98,7 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
   return (
     <Card className="lg:col-span-2 relative">
       <CardHeader>
-        <CardTitle>Memoria y Proyectos</CardTitle>
+        <CardTitle>Memorias y Proyectos</CardTitle>
         <CardDescription>{localMemories.length} elemento(s)</CardDescription>
       </CardHeader>
       <CardContent>
@@ -108,7 +107,7 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
             {localMemories.map((memory) => (
               <div
                 key={memory.id}
-                className="flex items-center gap-3 p-3 rounded-md bg-secondary/50"
+                className="flex flex-col md:flex-row items-center gap-3 p-3 rounded-md bg-secondary/50"
               >
                 {editingId === memory.id ? (
                   <>
@@ -121,23 +120,25 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
                     <Input
                       value={editProject}
                       onChange={(e) => setEditProject(e.target.value)}
-                      className="w-32"
+                      className="md:w-32"
                       placeholder="Proyecto..."
                     />
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} >
-                      <Check className="h-4 w-4 text-green-600" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="h-8 w-8"
-                      onClick={handleCancel}
-                    >
-                      <X className="h-4 w-4 text-red-600" />
-                    </Button>
+                    <div>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} >
+                        <Check className="h-4 w-4 text-green-600" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-8 w-8"
+                        onClick={handleCancel}
+                      >
+                        <X className="h-4 w-4 text-red-600" />
+                      </Button>
+                    </div>
                   </>
                 ) : (
-                  <>
+                  <div className="flex items-center w-full">
                     <span className="font-medium text-sm flex-1 truncate">
                       {memory.content}
                     </span>
@@ -159,15 +160,20 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
                     >
                       <Trash />
                     </Button>
-                  </>
+                  </div>
                 )}
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">
-            No hay memorias registradas
-          </p>
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">
+              No hay memorias registradas
+            </p>
+            <p className="text-xs text-muted-foreground italic">
+              Las memorias registran bugs, inconsistencias, cambios sin documentar o cualquier comportamiento importante que hayas encontrado usando esta API.
+            </p>
+          </div>
         )}
         <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>addMemory()} ><BadgePlus/></Button>
       </CardContent>

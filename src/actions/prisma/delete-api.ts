@@ -43,3 +43,28 @@ export async function deleteEvaluationAction(id: number) {
   })
 }
 
+export async function deleteContextAction(id: number) {
+  const contextID = Number(id)
+
+  if (Number.isNaN(contextID)) {
+    throw new Error('ID inválido')
+  }
+
+  await prisma.apiContext.delete({
+    where: { id: contextID },
+  })
+}
+
+export async function deleteFlagAction(id: number) {
+  const flagID = Number(id)
+
+  if (Number.isNaN(flagID)) {
+    throw new Error('ID inválido')
+  }
+
+  await prisma.apiFlag.delete({
+    where: { id: flagID },
+  })
+}
+
+

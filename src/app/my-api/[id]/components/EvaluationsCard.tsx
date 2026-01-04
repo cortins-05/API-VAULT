@@ -12,7 +12,7 @@ import { createEvaluation } from "@/actions/prisma/create-api";
 import { deleteEvaluationAction } from "@/actions/prisma/delete-api";
 
 interface Props {
-    evaluations: Eval[];
+    evaluation: Eval|null;
     apiId: number;
 }
 
@@ -38,10 +38,10 @@ function RatingBar({ label, value }: RatingProps) {
   );
 }
 
-export default function EvaluationCard({evaluations,apiId}:Props) {
+export default function EvaluationCard({evaluation,apiId}:Props) {
     const router = useRouter();
 
-    const [localEvaluations, setLocalEvaluations] = useState<Eval[]>([]);
+    const [localEvaluation, setLocalEvaluation] = useState<Eval|null>(null);
     const [editingId, setEditingId] = useState<number|null>(null);
     const [notes, setNotes] = useState("");
     const [cost, setCost] = useState<number>(0);
@@ -61,7 +61,7 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
             createdAt: new Date()
         };
 
-        setLocalEvaluations([...localEvaluations,newEvaluation]);
+        setLocalEvaluation(newEvaluation);
         handleEdit(newEvaluation);
         setNotes("");
         setCost(0);
@@ -81,7 +81,7 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
 
     function handleCancel(){
         if(editingId==280305){
-            setLocalEvaluations(evaluations);
+            setLocalEvaluation(evaluation);
         }
         setEditingId(null);
     };
@@ -103,7 +103,7 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
             apiId: Number(apiId)
         }
         if(editingId==280305){
-            await createEvaluation(evaluacion);
+            await createEvaluation(evaluacion, apiId);
         }else{
             if(!editingId) return;
             await updateEvaluation(evaluacion);
@@ -114,25 +114,30 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
     }
 
     useEffect(()=>{
-        setLocalEvaluations(evaluations);
-    },[evaluations]);
+        setLocalEvaluation(evaluation);
+    },[evaluation]);
 
   return (
     <Card className="lg:col-span-2 relative">
     <CardHeader>
-        <CardTitle>Evaluaciones</CardTitle>
+        <CardTitle>Evaluacion</CardTitle>
         <CardDescription>
-        {localEvaluations.length} evaluación(es)
+        {
+        localEvaluation
+        ?
+        ""
+        :
+        "No hay evaluaciones"
+        }
         </CardDescription>
     </CardHeader>
     <CardContent>
-        {localEvaluations.length > 0 ? (
-        <div className="space-y-6">
-            {localEvaluations.map((eva) => (
-            <div key={eva.id} className="space-y-4 pb-6 border-b last:pb-0 last:border-0">
+        {localEvaluation ? (
+            <div className="space-y-6">
+            <div key={localEvaluation.id} className="space-y-4 pb-6 border-b last:pb-0 last:border-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {
-                        editingId==eva.id
+                        editingId==localEvaluation.id
                         ?
                             <>
                                 <p>Cost: <Input type="range" value={cost} onChange={(e)=>setCost(Number(e.target.value))} min={0} max={5} /></p>
@@ -142,10 +147,10 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
                             </>
                         :
                         <>
-                            <RatingBar label="Costo" value={eva.costValue} />
-                            <RatingBar label="Rendimiento" value={eva.performance} />
-                            <RatingBar label="Estabilidad" value={eva.stability} />
-                            <RatingBar label="Soporte" value={eva.support} />
+                            <RatingBar label="Costo" value={localEvaluation.costValue} />
+                            <RatingBar label="Rendimiento" value={localEvaluation.performance} />
+                            <RatingBar label="Estabilidad" value={localEvaluation.stability} />
+                            <RatingBar label="Soporte" value={localEvaluation.support} />
                         </>
                     }
                     
@@ -154,22 +159,22 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
                 <div className="flex mt-4 items-center w-full gap-5">
                     <div className="p-3 bg-secondary/50 rounded-md flex-1">
                         {
-                            editingId==eva.id
+                            editingId==localEvaluation.id
                             ?
                             <Input type="text" placeholder="Nota..." onChange={(e)=>{setNotes(e.target.value)}} />
                             :
                             <p className="text-sm">
-                                <span className="font-semibold">Notas:</span> {eva.notes}
+                                <span className="font-semibold">Notas:</span> {localEvaluation.notes}
                             </p>
                         }
                     </div>
                 </div>
                 <div className="flex w-full justify-center">
                     {
-                        editingId == eva.id
+                        editingId == localEvaluation.id
                         ?
                         <>
-                            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction(eva)} >
+                            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction(localEvaluation)} >
                                 <Check className="h-4 w-4 text-green-600" />
                             </Button>
                             <Button
@@ -183,23 +188,27 @@ export default function EvaluationCard({evaluations,apiId}:Props) {
                         </>
                         :
                         <div className="flex gap-3">
-                            <Button variant="ghost" onClick={()=>{handleEdit(eva)}}> <Pen/> </Button>
-                            <Button variant="ghost" onClick={()=>deleteEvaluation(eva.id)} > <Trash /> </Button>
+                            <Button variant="ghost" onClick={()=>{handleEdit(localEvaluation)}}> <Pen/> </Button>
+                            <Button variant="ghost" onClick={()=>deleteEvaluation(localEvaluation.id)} > <Trash /> </Button>
                         </div>
-
                     }
                 </div>
                 
             </div>
-            ))}
-        </div>
+            </div>
         ) : (
         <p className="text-sm text-muted-foreground">
             No hay evaluaciones registradas
         </p>
         )}
     </CardContent>
-    <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>{createOne()}} ><BadgePlus/></Button>
+    {
+        !localEvaluation 
+        ? 
+        <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>{createOne()}} ><BadgePlus/></Button> 
+        : 
+        <></>
+    }
     </Card>
   );
 }

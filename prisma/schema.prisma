@@ -42,7 +42,7 @@ model Api {
 
   provider    Provider  @relation(fields: [providerId], references: [id])
   memories    ApiMemory[]
-  evaluations ApiEvaluation[]
+  evaluation  ApiEvaluation?
   flags       ApiFlag[]
   contexts    ApiContext[]
 }
@@ -69,15 +69,15 @@ model ApiMemory {
 
 model ApiEvaluation {
   id           Int      @id @default(autoincrement())
-  apiId        Int
-  stability    Int      // 1–5
-  costValue    Int      // 1–5
-  performance  Int      // 1–5
-  support      Int      // 1–5
+  apiId        Int      @unique
+  stability    Int
+  costValue    Int
+  performance  Int
+  support      Int
   notes        String?
   createdAt    DateTime @default(now())
 
-  api          Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  api Api @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }
 
 enum FlagLevel {

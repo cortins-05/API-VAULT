@@ -1,6 +1,6 @@
 'use server'
 import { FormData } from '@/interfaces/gemini.interface';
-import { Eval } from '@/interfaces/prisma.interface';
+import { ContextType, Eval } from '@/interfaces/prisma.interface';
 import { prisma } from '@/lib/prisma'
 
 interface PropsUpdateKey {
@@ -111,5 +111,22 @@ export async function updateEvaluation(datos:Eval) {
         return true;
     }catch (err){
         throw err;
+    }
+}
+
+export async function updateContextCard(id:number,context:string,type:ContextType){
+    try{
+        await prisma.apiContext.update(
+            {
+                where: {id:Number(id)},
+                data: {
+                    context,
+                    type
+                }
+            }
+        );        
+        return true;
+    }catch{
+        throw "Fallo al enviar la solicitud";
     }
 }

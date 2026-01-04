@@ -12,6 +12,8 @@ import { ApiKeyDisplay } from "./components/ApiKeyDisplay";
 import { UpdateKeyButton } from '../../../components/UpdateKeyButton';
 import { MemoriesCard } from "./components/MemoriesCard";
 import EvaluationCard from './components/EvaluationsCard';
+import ContextsCard from './components/ContextsCard';
+import FlagsCard from './components/FlagsCard';
 
 export default async function MyApiPage({
   params,
@@ -33,15 +35,11 @@ export default async function MyApiPage({
   const contexts = await prisma.apiContext.findMany({
     where: { apiId: Number(id) },
   });
-  const evaluation = await prisma.apiEvaluation.findMany({
-    where: { apiId: Number(id) },
-  });
+
+  const evaluation = await prisma.apiEvaluation.findUnique({where:{apiId:Number(id)}});
 
   const flags = await prisma.apiFlag.findMany({ where: { apiId: Number(id) } });
-  const warnings = flags.filter((flag) => flag.level === "WARNING");
-  const black = flags.filter((flag) => flag.level === "BLACK");
-  const gray = flags.filter((flag) => flag.level === "GRAY");
-
+  
   const memories = await prisma.apiMemory.findMany({
     where: { apiId: Number(id) },
   });
@@ -105,31 +103,7 @@ export default async function MyApiPage({
           </Card>
 
           {/* Contexts Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Contextos</CardTitle>
-              <CardDescription>{contexts.length} contexto(s)</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {contexts.length > 0 ? (
-                  contexts.map((context) => (
-                    <div
-                      key={context.id}
-                      className="flex items-center p-2 rounded-md bg-secondary/50 text-sm"
-                    >
-                      <span className="w-2 h-2 bg-primary rounded-full mr-3" />
-                      {context.context}
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    No hay contextos registrados
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+          <ContextsCard contexts={contexts} apiID={api.id} />
 
           {/* Provider Card */}
           <Card>
@@ -176,74 +150,10 @@ export default async function MyApiPage({
           </Card>
 
           {/* Evaluations Card */}
-          <EvaluationCard evaluations={evaluation} apiId={id} />
+          <EvaluationCard evaluation={evaluation} apiId={id} />
 
           {/* Flags Card */}
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Alertas y Flags</CardTitle>
-              <CardDescription>
-                {warnings.length + black.length + gray.length} alerta(s) en total
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {warnings.length + black.length + gray.length > 0 ? (
-                <div className="space-y-4">
-                  {warnings.length > 0 && (
-                    <div>
-                      <h4 className="font-semibold text-amber-600 mb-2 flex items-center gap-2">
-                        <span className="w-3 h-3 bg-amber-400 rounded-full" />
-                        Advertencias ({warnings.length})
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {warnings.map((warning) => (
-                          <Badge key={warning.id} variant="outline" className="bg-amber-50 text-black">
-                            {warning.reason}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {black.length > 0 && (
-                    <div>
-                      <h4 className="font-semibold text-destructive mb-2 flex items-center gap-2">
-                        <span className="w-3 h-3 bg-destructive rounded-full" />
-                        Críticas ({black.length})
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {black.map((bl) => (
-                          <Badge key={bl.id} variant="destructive">
-                            {bl.reason}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {gray.length > 0 && (
-                    <div>
-                      <h4 className="font-semibold text-muted-foreground mb-2 flex items-center gap-2">
-                        <span className="w-3 h-3 bg-muted-foreground rounded-full" />
-                        Información ({gray.length})
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {gray.map((gr) => (
-                          <Badge key={gr.id} variant="secondary">
-                            {gr.reason}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Sin alertas o flags registrados
-                </p>
-              )}
-            </CardContent>
-          </Card>
+          <FlagsCard flags={flags} apiId={api.id} />
 
           <MemoriesCard memories={memories} apiId={id} />
         </div>
