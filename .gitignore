@@ -2,7 +2,9 @@
 
 /postgres
 
-.env
+.env*
+
+!.env.template
 
 # dependencies
 /node_modules
