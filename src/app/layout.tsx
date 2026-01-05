@@ -9,6 +9,7 @@ import ThemeToggle from '../components/themeToggle';
 import { NavGroup } from "@/interfaces/navbar.interface";
 import { Footer } from '../components/Footer';
 import { Clapperboard, Hammer, ChartNoAxesGantt, Zap } from "lucide-react";
+import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,6 +85,7 @@ export default function RootLayout({
                 <div className="flex flex-col flex-1">
                   <div className="flex-1">
                     {children}
+                    <Toaster/>
                   </div>
                   <footer className="w-full flex justify-end shrink-0 px-3">
                     <Footer />

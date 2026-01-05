@@ -22,6 +22,7 @@ export default function FlagsCard({flags, apiId}:Props) {
 
     const [localFlags, setLocalFlags] = useState<Flag[]>([])
     const [editId, setEditId] = useState<number|null>(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [level, setLevel] = useState<FlagLevel>();
     const [reason, setReason] = useState<string>();
     const router = useRouter();
@@ -34,10 +35,10 @@ export default function FlagsCard({flags, apiId}:Props) {
         if(!flags) return;
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setLocalFlags(flags);
-        setWarnings(localFlags.filter((flag) => flag.level === "WARNING"));
-        setBlack(localFlags.filter((flag) => flag.level === "BLACK"));
-        setGray(localFlags.filter((flag) => flag.level === "GRAY"));
-    },[flags,localFlags]);
+        setWarnings(flags.filter((flag) => flag.level === "WARNING"));
+        setBlack(flags.filter((flag) => flag.level === "BLACK"));
+        setGray(flags.filter((flag) => flag.level === "GRAY"));
+    },[flags]);
 
     const addFlag = () => {
 
@@ -58,10 +59,16 @@ export default function FlagsCard({flags, apiId}:Props) {
     async function createFlag() {
         if(!reason) return;
         if(!level) return;
-        await createFlagAction(apiId,reason,level);
+        setIsLoading(true);
+        try {
+            await createFlagAction(apiId,reason,level);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     const handleAction = async () => {
+        if(isLoading) return;
         await createFlag();
         router.refresh();
         handleCancel();
@@ -75,8 +82,14 @@ export default function FlagsCard({flags, apiId}:Props) {
     };
 
     async function deleteFlag(id:number){
-        await deleteFlagAction(id);
-        router.refresh();
+        if(isLoading) return;
+        setIsLoading(true);
+        try {
+            await deleteFlagAction(id);
+            router.refresh();
+        } finally {
+            setIsLoading(false);
+        }
     }
 
 
@@ -118,7 +131,7 @@ export default function FlagsCard({flags, apiId}:Props) {
                             </div>
                         </div>
                         <div className="flex gap-2 justify-center md:justify-start">
-                            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} >
+                            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} disabled={isLoading}>
                                 <Check className="h-4 w-4 text-green-600" />
                             </Button>
                             <Button
@@ -126,6 +139,7 @@ export default function FlagsCard({flags, apiId}:Props) {
                             variant="ghost"
                             className="h-8 w-8"
                             onClick={handleCancel}
+                            disabled={isLoading}
                             >
                                 <X className="h-4 w-4 text-red-600" />
                             </Button>
@@ -142,7 +156,7 @@ export default function FlagsCard({flags, apiId}:Props) {
                         </h4>
                         <div className="flex flex-wrap gap-2">
                         {warnings.map((warning) => (
-                            <Badge key={warning.id} variant="outline" className="bg-amber-50 text-black cursor-pointer" onClick={()=>deleteFlag(warning.id)}>
+                            <Badge key={warning.id} variant="outline" className="bg-amber-50 text-black cursor-pointer" onDoubleClick={()=>deleteFlag(warning.id)}>
                                 {warning.reason}
                             </Badge>
                         ))}
@@ -193,7 +207,7 @@ export default function FlagsCard({flags, apiId}:Props) {
                 </div>
                 )}
             </CardContent>
-            <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>addFlag()} ><BadgePlus/></Button>
+            <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>addFlag()} disabled={isLoading}><BadgePlus/></Button>
         </Card>
     );
 }

@@ -3,6 +3,7 @@ import { ShimmeringText } from "@/components/text/shmiring-text";
 import { TextGenerateEffect } from "@/components/text/text-generate-effect";
 
 export default function Home() {
+
   return (
     <main className="w-full h-full flex flex-col gap-20 items-center justify-center" >
 

@@ -43,6 +43,7 @@ export default function EvaluationCard({evaluation,apiId}:Props) {
 
     const [localEvaluation, setLocalEvaluation] = useState<Eval|null>(null);
     const [editingId, setEditingId] = useState<number|null>(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [notes, setNotes] = useState("");
     const [cost, setCost] = useState<number>(0);
     const [stability, setStability] = useState<number>(0);
@@ -87,11 +88,18 @@ export default function EvaluationCard({evaluation,apiId}:Props) {
     };
 
     async function deleteEvaluation(id:number){
-        await deleteEvaluationAction(id);
-        router.refresh();
+        if(isLoading) return;
+        setIsLoading(true);
+        try {
+            await deleteEvaluationAction(id);
+            router.refresh();
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     async function handleAction(eva:Eval){
+        if(isLoading) return;
         const evaluacion:Eval = {
             id: eva.id,
             costValue: cost,
@@ -102,15 +110,19 @@ export default function EvaluationCard({evaluation,apiId}:Props) {
             createdAt: eva.createdAt,
             apiId: Number(apiId)
         }
-        if(editingId==280305){
-            await createEvaluation(evaluacion, apiId);
-        }else{
-            if(!editingId) return;
-            await updateEvaluation(evaluacion);
+        setIsLoading(true);
+        try {
+            if(editingId==280305){
+                await createEvaluation(evaluacion, apiId);
+            }else{
+                if(!editingId) return;
+                await updateEvaluation(evaluacion);
+            }
             router.refresh();
+            handleCancel();
+        } finally {
+            setIsLoading(false);
         }
-        router.refresh();
-        handleCancel();
     }
 
     useEffect(()=>{
@@ -174,7 +186,7 @@ export default function EvaluationCard({evaluation,apiId}:Props) {
                         editingId == localEvaluation.id
                         ?
                         <>
-                            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction(localEvaluation)} >
+                            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction(localEvaluation)} disabled={isLoading}>
                                 <Check className="h-4 w-4 text-green-600" />
                             </Button>
                             <Button
@@ -182,14 +194,15 @@ export default function EvaluationCard({evaluation,apiId}:Props) {
                             variant="ghost"
                             className="h-8 w-8"
                             onClick={handleCancel}
+                            disabled={isLoading}
                             >
                                 <X className="h-4 w-4 text-red-600" />
                             </Button>
                         </>
                         :
                         <div className="flex gap-3">
-                            <Button variant="ghost" onClick={()=>{handleEdit(localEvaluation)}}> <Pen/> </Button>
-                            <Button variant="ghost" onClick={()=>deleteEvaluation(localEvaluation.id)} > <Trash /> </Button>
+                            <Button variant="ghost" onClick={()=>{handleEdit(localEvaluation)}} disabled={isLoading}> <Pen/> </Button>
+                            <Button variant="ghost" onClick={()=>deleteEvaluation(localEvaluation.id)} disabled={isLoading}> <Trash /> </Button>
                         </div>
                     }
                 </div>

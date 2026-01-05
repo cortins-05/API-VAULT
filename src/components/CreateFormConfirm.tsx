@@ -23,6 +23,7 @@ interface Props {
 export default function FormConfirm({ data,IA,update }: Props) {
 
   const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState<FormData>({
     name: data.name || "",
@@ -45,19 +46,27 @@ export default function FormConfirm({ data,IA,update }: Props) {
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    console.log(form);
-    if(update){
-        await updateApi(form,update).then(()=>{setOpen(true)});
-    }else{
-        await createApiAction(form).then(()=>{setOpen(true)});
-    }
-    setTimeout(() => {
+    if(isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      console.log(form);
       if(update){
-        redirect(`/my-api/${update}`);
+        await updateApi(form,update).then(()=>{setOpen(true)});
       }else{
-        redirect("/gestor-apis");
+        await createApiAction(form).then(()=>{setOpen(true)});
       }
-    }, 3000);
+      setTimeout(() => {
+        if(update){
+          redirect(`/my-api/${update}`);
+        }else{
+          redirect("/gestor-apis");
+        }
+      }, 2000);
+    } catch(error) {
+      console.error(error);
+      setIsSubmitting(false);
+    }
   }
 
   const handleChange = (
@@ -355,11 +364,11 @@ export default function FormConfirm({ data,IA,update }: Props) {
         </div>
 
         <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline" onClick={()=>{redirect(`/my-api/${update}`)}}>
+          <Button type="button" variant="outline" onClick={()=>{redirect(`/my-api/${update}`)}} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button type="submit">
-            Confirm & Save
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Guardando..." : "Confirm & Save"}
           </Button>
         </div>
       </form>

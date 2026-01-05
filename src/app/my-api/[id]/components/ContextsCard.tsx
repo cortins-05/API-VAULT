@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { createContextCard } from "@/actions/prisma/create-api";
 import { updateContextCard } from "@/actions/prisma/update-api";
 import { deleteContextAction } from "@/actions/prisma/delete-api";
+import { toast } from "sonner";
 
 interface Props {
     contexts: Contexts[];
@@ -25,6 +26,8 @@ export default function ContextsCard({contexts,apiID}:Props) {
     const [editIdHover, setEditIdHover] = useState<number|null>(null);
     const [context, setContext] = useState<string>();
     const [type, setType] = useState<ContextType>();
+    const [isLoading, setIsLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(()=>{
@@ -65,25 +68,31 @@ export default function ContextsCard({contexts,apiID}:Props) {
     async function createCard() {
         if(!context) return;
         if(!type) return;
-        await createContextCard(apiID,context,type);
+        setIsLoading(true);
+        try {
+            await createContextCard(apiID,context,type);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     async function updateCard() {
         if(!editId) return;
         if(!context) return;
         if(!type) return;
+        if(isLoading) return;
 
-        await updateContextCard(editId,context,type)
-        .then(
-            (exito) => {
+        setIsLoading(true);
+        try {
+            const exito = await updateContextCard(editId,context,type);
             if(exito){
-                router.refresh();
-                handleCancel();
+                setSuccessMessage("Componente actualizado con éxito");
             }
-            }
-        ).catch(
-            err=>console.error(err)
-        );
+        } catch(err) {
+            console.error(err);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     async function editContext(id:number) {
@@ -91,6 +100,7 @@ export default function ContextsCard({contexts,apiID}:Props) {
     }
 
     const handleAction = async () => {
+        if(isLoading) return;
         if(editId==280305){
             await createCard();
         }else{
@@ -108,8 +118,14 @@ export default function ContextsCard({contexts,apiID}:Props) {
     };
 
     async function deleteContext(id:number){
-        await deleteContextAction(id);
-        router.refresh();
+        if(isLoading) return;
+        setIsLoading(true);
+        try {
+            await deleteContextAction(id);
+            router.refresh();
+        } finally {
+            setIsLoading(false);
+        }
     }
 
   return (
@@ -130,7 +146,7 @@ export default function ContextsCard({contexts,apiID}:Props) {
                             >
                                 <span className="w-2 h-2 bg-primary rounded-full shrink-0" />
                                 <Input type="text" placeholder={context.context} onChange={(e)=>{setContext(e.target.value)}} />
-                                <Select onValueChange={(e:ContextType)=>{setType(e)}} >
+                                <Select onValueChange={(e:ContextType)=>{setType(e)}} value={type??undefined} >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Type"/>
                                     </SelectTrigger>
@@ -141,7 +157,7 @@ export default function ContextsCard({contexts,apiID}:Props) {
                                 </Select>
                             </div>
                             <div className="flex justify-center"> 
-                                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} >
+                                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} disabled={isLoading}>
                                     <Check className="h-4 w-4 text-green-600" />
                                 </Button>
                                 <Button
@@ -149,6 +165,7 @@ export default function ContextsCard({contexts,apiID}:Props) {
                                 variant="ghost"
                                 className="h-8 w-8"
                                 onClick={handleCancel}
+                                disabled={isLoading}
                                 >
                                     <X className="h-4 w-4 text-red-600" />
                                 </Button>
@@ -170,8 +187,8 @@ export default function ContextsCard({contexts,apiID}:Props) {
                                 &&
                                 (
                                     <div className="flex gap-3 absolute right-35">
-                                        <Button variant="ghost" onClick={()=>{editContext(context.id)}}> <Pen/> </Button>
-                                        <Button variant="ghost" onClick={()=>deleteContext(context.id)} > <Trash /> </Button>
+                                        <Button variant="ghost" onClick={()=>{editContext(context.id)}} disabled={isLoading}> <Pen/> </Button>
+                                        <Button variant="ghost" onClick={()=>deleteContext(context.id)} disabled={isLoading}> <Trash /> </Button>
                                     </div>
                                 )
                             }
@@ -197,7 +214,7 @@ export default function ContextsCard({contexts,apiID}:Props) {
             )}
             </div>
         </CardContent>
-        <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>addContext()} ><BadgePlus/></Button>
+        <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>addContext()} disabled={isLoading}><BadgePlus/></Button>
     </Card>
   );
 }

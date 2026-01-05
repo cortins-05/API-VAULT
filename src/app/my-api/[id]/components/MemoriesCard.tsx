@@ -22,6 +22,7 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
   const [editProject, setEditProject] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -52,33 +53,46 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
   };
 
   const deleteMemory = async (memory:ApiMemory) => {
+    if(isLoading) return;
     setLocalMemories(prev => prev.filter(m => m.id !== memory.id));
-    
+    setIsLoading(true);
     try {
       await deleteMemoryAction(memory.id, memory.apiId);
       router.refresh();
     } catch (error) {
       setLocalMemories(memories);
       console.error('Error eliminando memoria:', error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   async function createCard() {
-    await createMemoryCard(apiId,editContent,editProject)
+    setIsLoading(true);
+    try {
+      await createMemoryCard(apiId,editContent,editProject);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function updateCard() {
-    await updateMemoryCard(editingId!,editContent,editProject).then(
-      (exito) => {
-        if(exito){
-          router.refresh();
-          handleCancel();
-        }
+    setIsLoading(true);
+    try {
+      const exito = await updateMemoryCard(editingId!,editContent,editProject);
+      if(exito){
+        router.refresh();
+        handleCancel();
       }
-    ).catch(err=>console.error(err));
+    } catch(err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const handleAction = async () => {
+    if(isLoading) return;
     if(editingId==280305){
       await createCard();
     }else{
@@ -116,15 +130,17 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
                       onChange={(e) => setEditContent(e.target.value)}
                       className="flex-1"
                       placeholder="Contenido..."
+                      disabled={isLoading}
                     />
                     <Input
                       value={editProject}
                       onChange={(e) => setEditProject(e.target.value)}
                       className="md:w-32"
                       placeholder="Proyecto..."
+                      disabled={isLoading}
                     />
                     <div>
-                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} >
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} disabled={isLoading}>
                         <Check className="h-4 w-4 text-green-600" />
                       </Button>
                       <Button
@@ -132,6 +148,7 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
                         variant="ghost"
                         className="h-8 w-8"
                         onClick={handleCancel}
+                        disabled={isLoading}
                       >
                         <X className="h-4 w-4 text-red-600" />
                       </Button>
@@ -149,6 +166,7 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
                       variant="ghost"
                       className="h-8 w-8"
                       onClick={() => handleEdit(memory)}
+                      disabled={isLoading}
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
@@ -157,6 +175,7 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
                       variant="ghost"
                       className="h-8 w-8"
                       onClick={()=>deleteMemory(memory)}
+                      disabled={isLoading}
                     >
                       <Trash />
                     </Button>
@@ -175,7 +194,7 @@ export function MemoriesCard({ memories,apiId }: MemoriesCardProps) {
             </p>
           </div>
         )}
-        <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>addMemory()} ><BadgePlus/></Button>
+        <Button variant="ghost" className="absolute top-3 right-3" onClick={()=>addMemory()} disabled={isLoading}><BadgePlus/></Button>
       </CardContent>
     </Card>
   );

@@ -10,29 +10,42 @@ interface Props {
 }
 
 export const UpdateKeyButton = ({apiId}:Props) => {
-    const router = useRouter();
-    const [apiKey, setApiKey] = useState("");
+  const router = useRouter();
+  const [apiKey, setApiKey] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-    async function submit() {
-        await updateApiKey({id:apiId,key:apiKey})
-        .then((res)=>{
-            if(res){
-                alert("Key actualizada");
-                router.refresh();
-            }
-        })
-    }
+  async function submit() {
+      if(isLoading) return;
+      if(!apiKey) return;
+      
+      setIsLoading(true);
+      try {
+          const res = await updateApiKey({id:apiId,key:apiKey});
+          if(res){
+              alert("Key actualizada");
+              router.refresh();
+          }
+      } catch(error) {
+          alert("Error al actualizar la key");
+          console.error(error);
+      } finally {
+          setIsLoading(false);
+      }
+  }
 
   return (
     <InputButtonProvider>
       <InputButton>
         <InputButtonAction>Update API Key</InputButtonAction>
-        <InputButtonSubmit onClick={submit}>Update</InputButtonSubmit>
+        <InputButtonSubmit onClick={submit} disabled={isLoading}>
+          {isLoading ? "Actualizando..." : "Update"}
+        </InputButtonSubmit>
       </InputButton>
       <InputButtonInput 
         type="text" 
         placeholder="Your API key here..." 
         onChange={(e) => setApiKey(e.target.value)}
+        disabled={isLoading}
       />
     </InputButtonProvider>
   );

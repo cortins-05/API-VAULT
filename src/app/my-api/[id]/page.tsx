@@ -14,6 +14,7 @@ import { MemoriesCard } from "./components/MemoriesCard";
 import EvaluationCard from './components/EvaluationsCard';
 import ContextsCard from './components/ContextsCard';
 import FlagsCard from './components/FlagsCard';
+import { Contexts, Eval } from '../../../interfaces/prisma.interface';
 
 export default async function MyApiPage({
   params,
@@ -32,21 +33,13 @@ export default async function MyApiPage({
     redirect("/");
   }
   
-  const contexts = await prisma.apiContext.findMany({
-    where: { apiId: Number(id) },
-  });
-
-  const evaluation = await prisma.apiEvaluation.findUnique({where:{apiId:Number(id)}});
-
-  const flags = await prisma.apiFlag.findMany({ where: { apiId: Number(id) } });
-  
-  const memories = await prisma.apiMemory.findMany({
-    where: { apiId: Number(id) },
-  });
-  
-  const provider = await prisma.provider.findUnique({
-    where: { id: (api?.providerId) },
-  });
+  const [contexts, evaluation, flags, memories, provider] = await Promise.all([
+    prisma.apiContext.findMany({ where: { apiId: Number(id) } }),
+    prisma.apiEvaluation.findUnique({where:{apiId:Number(id)}}),
+    prisma.apiFlag.findMany({ where: { apiId: Number(id) } }),
+    prisma.apiMemory.findMany({where: { apiId: Number(id) }}),
+    prisma.provider.findUnique({where: { id: (api?.providerId) }})
+  ])
 
   return (
     <div className="min-h-screen bg-background p-6">
