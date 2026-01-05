@@ -26,3 +26,14 @@ export interface Flag {
   apiId: number;
   reason: string;
 }
+
+export interface Provider {
+  id?: number;
+  name: string;
+  website: string | null;
+  docsUrl: string | null;
+  supportLevel: "" | "GOOD" | "AVERAGE" | "BAD" | null;
+  notes: string |null;
+  apis?: number[];
+  createdAt?: Date;
+}

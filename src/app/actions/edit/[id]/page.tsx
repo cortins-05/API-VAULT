@@ -30,11 +30,6 @@ export default async function EditApiPage({
     docsUrl: data.provider.docsUrl || "",
     supportLevel: data.provider.supportLevel,
     notes: data.provider.notes,
-    apiType: "Unknown",
-    authMethods: [],
-    hasOfficialSdk: [],
-    pricingModel: "UNKNOWN",
-    confidence: 0,
   };
 
   return (

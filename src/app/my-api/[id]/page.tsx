@@ -1,5 +1,4 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { prisma } from "@/lib/prisma";
@@ -14,7 +13,6 @@ import { MemoriesCard } from "./components/MemoriesCard";
 import EvaluationCard from './components/EvaluationsCard';
 import ContextsCard from './components/ContextsCard';
 import FlagsCard from './components/FlagsCard';
-import { Contexts, Eval } from '../../../interfaces/prisma.interface';
 
 export default async function MyApiPage({
   params,

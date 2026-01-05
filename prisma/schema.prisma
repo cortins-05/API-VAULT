@@ -28,19 +28,20 @@ model Provider {
   notes        String?
   createdAt    DateTime      @default(now())
 
-  api          Api?
+  apis         Api[]         // 1 Provider → N Apis
 }
 
 model Api {
   id          Int       @id @default(autoincrement())
   name        String
   key         String?
-  providerId  Int       @unique
+  providerId  Int                   // OBLIGATORIO
   description String?
   deprecated  Boolean   @default(false)
   createdAt   DateTime  @default(now())
 
   provider    Provider  @relation(fields: [providerId], references: [id])
+
   memories    ApiMemory[]
   evaluation  ApiEvaluation?
   flags       ApiFlag[]

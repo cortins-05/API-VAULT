@@ -5,14 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { createApiAction } from "@/actions/prisma/create-api";
 import { ReloadGuard } from "@/helpers/BeforeUnload";
 import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
 import { redirect } from "next/navigation";
 import { updateApi } from "@/actions/prisma/update-api";
+import { toast } from "sonner";
+import { getProviders } from "@/actions/prisma/create-provider";
+import { Provider } from "@/interfaces/prisma.interface";
 
 interface Props {
   data: ApiDraft;
@@ -20,10 +22,17 @@ interface Props {
   update?: number;
 }
 
-export default function FormConfirm({ data,IA,update }: Props) {
+export default function FormConfirm({ data, IA,update }: Props) {
 
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [providers, setProviders] = useState<Provider[]>([]);
+
+  const getProv = async()=>{
+    await getProviders().then(res=>{setProviders(res)});
+  }
+
+  useEffect(() => { getProv(); }, [])
 
   const [form, setForm] = useState<FormData>({
     name: data.name || "",
@@ -31,22 +40,18 @@ export default function FormConfirm({ data,IA,update }: Props) {
     description: data.description || "",
     deprecated: data.deprecated || false,
 
-    provider: data.provider || "",
-    website: data.website || "",
-    docsUrl: data.docsUrl || "",
-    supportLevel: data.supportLevel || "",
-    notes: data.notes || "",
+    providerId: null
 
-    apiType: data.apiType || "Unknown",
-    authMethods: data.authMethods || [],
-    hasOfficialSdk: data.hasOfficialSdk || [],
-    pricingModel: data.pricingModel || "UNKNOWN",
-    confidence: data.confidence ?? 0,
   });
 
   async function submit(e: FormEvent) {
     e.preventDefault();
     if(isSubmitting) return;
+
+    if(form.providerId==null||form.providerId==""){
+      toast("No se ha seleccionado ningun proveedor.");
+      return;
+    }
     
     setIsSubmitting(true);
     try {
@@ -89,33 +94,12 @@ export default function FormConfirm({ data,IA,update }: Props) {
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
+
+    setForm(prev => ({
       ...prev,
-      [name]: value,
+      [name]: value === "" ? null : Number(value),
     }));
   };
-
-  const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const numeric = value === "" ? 0 : Number(value);
-    setForm((prev) => ({
-      ...prev,
-      [name]: numeric,
-    }));
-  };
-
-  const handleCommaListChange = (name: "authMethods" | "hasOfficialSdk") =>
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      const list = value
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
-      setForm((prev) => ({
-        ...prev,
-        [name]: list,
-      }));
-    };
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8 p-6">
@@ -128,9 +112,9 @@ export default function FormConfirm({ data,IA,update }: Props) {
       </div>
 
       <form className="space-y-6" onSubmit={submit}>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col md:flex-row gap-6">
           {/* API Fields Card */}
-          <Card>
+          <Card className="flex-2">
             <CardHeader>
               <CardTitle>API Fields</CardTitle>
               <CardDescription>Basic information about the API</CardDescription>
@@ -187,183 +171,36 @@ export default function FormConfirm({ data,IA,update }: Props) {
               </div>
             </CardContent>
           </Card>
-
-          {/* Provider Fields Card */}
-          <Card>
+          
+          {/* Select Provider Card */}
+          <Card className="flex-1">
             <CardHeader>
-              <CardTitle>Provider Fields</CardTitle>
-              <CardDescription>Information about the provider</CardDescription>
+              <CardTitle>Provider</CardTitle>
+              <CardDescription>Select the Provider (obligatory)</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="provider">Provider</Label>
-                <Input
-                  id="provider"
-                  name="provider"
-                  type="text"
-                  value={form.provider}
-                  onChange={handleChange}
-                  placeholder="Provider name"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="website">Website</Label>
-                <Input
-                  id="website"
-                  name="website"
-                  type="url"
-                  value={form.website}
-                  onChange={handleChange}
-                  placeholder="https://example.com"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="docsUrl">Documentation URL</Label>
-                <Input
-                  id="docsUrl"
-                  name="docsUrl"
-                  type="url"
-                  value={form.docsUrl}
-                  onChange={handleChange}
-                  placeholder="https://docs.example.com"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="supportLevel">Support Level</Label>
+                <Label htmlFor="apiType">Provider(s)</Label>
                 <select
-                  id="supportLevel"
-                  name="supportLevel"
-                  value={form.supportLevel}
+                  id="providerId"
+                  name="providerId"
+                  value={form.providerId ?? ""}
                   onChange={handleSelectChange}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <option value="">Not specified</option>
-                  <option value="GOOD">Good</option>
-                  <option value="AVERAGE">Average</option>
-                  <option value="BAD">Bad</option>
+                  <option value="">Select a provider</option>
+                  {
+                    providers.map(provider=>(
+                      <option key={provider.id} value={provider.id}>{provider.name}</option>
+                    ))
+                  }
                 </select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
-                <Textarea
-                  id="notes"
-                  name="notes"
-                  value={form.notes}
-                  onChange={handleChange}
-                  placeholder="Additional notes"
-                  rows={3}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Metadata Fields Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Metadata Fields</CardTitle>
-              <CardDescription>Technical specifications</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="apiType">API Type</Label>
-                <select
-                  id="apiType"
-                  name="apiType"
-                  value={form.apiType}
-                  onChange={handleSelectChange}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="REST">REST</option>
-                  <option value="GraphQL">GraphQL</option>
-                  <option value="gRPC">gRPC</option>
-                  <option value="WebSocket">WebSocket</option>
-                  <option value="Unknown">Unknown</option>
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="authMethods">Authentication Methods</Label>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {form.authMethods.map((method, index) => (
-                    <Badge key={index} variant="secondary">
-                      {method}
-                    </Badge>
-                  ))}
-                </div>
-                <Input
-                  id="authMethods"
-                  name="authMethods"
-                  type="text"
-                  value={form.authMethods.join(", ")}
-                  onChange={handleCommaListChange("authMethods")}
-                  placeholder="API Key, OAuth 2.0, JWT"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="hasOfficialSdk">Official SDKs</Label>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {form.hasOfficialSdk.map((sdk, index) => (
-                    <Badge key={index} variant="outline">
-                      {sdk}
-                    </Badge>
-                  ))}
-                </div>
-                <Input
-                  id="hasOfficialSdk"
-                  name="hasOfficialSdk"
-                  type="text"
-                  value={form.hasOfficialSdk.join(", ")}
-                  onChange={handleCommaListChange("hasOfficialSdk")}
-                  placeholder="JavaScript, Python, Go"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pricingModel">Pricing Model</Label>
-                <select
-                  id="pricingModel"
-                  name="pricingModel"
-                  value={form.pricingModel}
-                  onChange={handleSelectChange}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="FREE">Free</option>
-                  <option value="FREEMIUM">Freemium</option>
-                  <option value="PAY_PER_USE">Pay per use</option>
-                  <option value="SUBSCRIPTION">Subscription</option>
-                  <option value="UNKNOWN">Unknown</option>
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confidence">Confidence Score</Label>
-                <div className="flex items-center space-x-2">
-                  <Input
-                    id="confidence"
-                    name="confidence"
-                    type="number"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={form.confidence}
-                    onChange={handleNumberChange}
-                    className="w-20"
-                  />
-                    <span className="text-sm text-muted-foreground">
-                      {Math.round(form.confidence * 100)}%
-                    </span>
-                </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="flex justify-end gap-4">
+        <div className="mt-10 flex justify-end gap-4">
           <Button type="button" variant="outline" onClick={()=>{redirect(`/my-api/${update}`)}} disabled={isSubmitting}>
             Cancel
           </Button>
@@ -383,9 +220,9 @@ export default function FormConfirm({ data,IA,update }: Props) {
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => {
                 if(update){
-                    redirect(`/my-api/${update}`);
+                  redirect(`/my-api/${update}`);
                 }else{
-                    redirect("/gestor-apis")
+                  redirect("/gestor-apis")
                 }
             }}>Aceptar</AlertDialogAction>
           </AlertDialogFooter>

@@ -15,16 +15,9 @@ export interface ApiDraft {
   docsUrl: string;
   supportLevel: "GOOD" | "AVERAGE" | "BAD" | null;
   notes: string | null;
-
-  // Metadata fields
-  apiType: "REST" | "GraphQL" | "gRPC" | "WebSocket" | "Unknown";
-  authMethods: string[];
-  hasOfficialSdk: string[];
-  pricingModel: "FREE" | "FREEMIUM" | "PAY_PER_USE" | "SUBSCRIPTION" | "UNKNOWN";
-  confidence: number;
 }
 
-export const emptyApiDraft: ApiDraft = { name: "", description: null, deprecated: false, provider: null, website: null, docsUrl: "", supportLevel: null, notes: null, apiType: "Unknown", authMethods: [], hasOfficialSdk: [], pricingModel: "UNKNOWN", confidence: 0 };
+export const emptyApiDraft: ApiDraft = { name: "", description: null, deprecated: false, provider: null, website: null, docsUrl: "", supportLevel: null, notes: null};
 
 /**
  * Enum para los niveles de soporte del proveedor
@@ -64,17 +57,5 @@ export interface FormData {
   description: string;
   deprecated: boolean;
 
-  /* Provider */
-  provider: string;
-  website: string;
-  docsUrl: string;
-  supportLevel: "" | "GOOD" | "AVERAGE" | "BAD";
-  notes: string;
-
-  /* Metadata */
-  apiType: "REST" | "GraphQL" | "gRPC" | "WebSocket" | "Unknown";
-  authMethods: string[];
-  hasOfficialSdk: string[];
-  pricingModel: "FREE" | "FREEMIUM" | "PAY_PER_USE" | "SUBSCRIPTION" | "UNKNOWN";
-  confidence: number;
+  providerId: number|null;
 }

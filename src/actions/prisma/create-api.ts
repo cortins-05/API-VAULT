@@ -6,33 +6,24 @@ import { revalidatePath } from 'next/cache';
 
 export async function createApiAction(data: FormData) {
     try {
-        const api = {
-            name: data.name,
-            key: data.key || null,
-            description: data.description,
-            deprecated: data.deprecated,
-        };
-
-        const provider = {
-            name: data.provider,
-            website: data.website || null,
-            docsUrl: data.docsUrl,
-            supportLevel: data.supportLevel === "" ? null : data.supportLevel,
-            notes: data.notes || null,
-            api: {
-                create: api,
+        await prisma.api.create({
+            data: {
+                name: data.name,
+                key: data.key || null,
+                description: data.description,
+                deprecated: data.deprecated,
+                provider: {
+                connect: {
+                    id: Number(data.providerId),
+                },
+                },
             },
-        };
-
-        await prisma.provider.create({
-            data: provider,
         });
 
         return true;
 
-    } catch (error) {
-        console.error("Error creating provider + api", error);
-        throw error;
+    } catch {
+        return false
     }
 }
 
