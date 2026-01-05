@@ -7,10 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Provider } from "@/interfaces/prisma.interface";
 import { Label } from "@radix-ui/react-label";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {toast} from "sonner";
 
 export default function FormProvider() {
+
+    const router = useRouter();
 
     const emptyForm:Provider = {
         name: "",
@@ -35,6 +38,7 @@ export default function FormProvider() {
         await createProvider(form)
         .then(()=>{
             toast("Proveedor guardado con exito");
+            router.push("/gestor-proveedores");
         })
         .catch(()=>{
             toast("No se ha podido crear el proveedor, intentelo de nuevo.")

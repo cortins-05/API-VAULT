@@ -3,35 +3,27 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { ApiComponent } from "@/components/ApiComponent";
+import { Provider } from '@/interfaces/prisma.interface';
+import { ProviderComponent } from "./ProviderComponent";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-interface Api {
-  id: number;
-  name: string;
-  key: string | null;
-  providerId: number;
-  description: string | null;
-  deprecated: boolean;
-  docsUrl: string | null;
-  createdAt: Date;
-}
-
 interface Props {
-  apis: Api[];
+  providers: Provider[];
 }
 
-export default function SearchApis({ apis }: Props) {
+export default function SearchProviders({ providers }: Props) {
   const [query, setQuery] = useState("");
 
-  const filteredApis = apis.filter(api =>
+  const filteredApis = providers.filter(api =>
     api.name.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
     <main className="h-full w-full flex flex-col gap-10 p-5">
-      <Button variant={"link"} className="absolute right-7"><Link href={"/actions/createManually"}>Add One</Link></Button>
+
+      <Button variant={"link"} className="absolute right-7"><Link href={"/actions/newProvider"}>Add One</Link></Button>
+
       <div className="relative w-full max-w-md">
         {/* Icono dentro del input */}
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -49,8 +41,8 @@ export default function SearchApis({ apis }: Props) {
       </div>
 
       <div className="flex gap-20 flex-wrap">
-        {filteredApis.map(api => (
-          <ApiComponent key={api.id} api={api} />
+        {filteredApis.map(provider => (
+          <ProviderComponent key={provider.id} provider={provider} />
         ))}
       </div>
     </main>
