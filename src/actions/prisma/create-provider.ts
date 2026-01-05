@@ -12,7 +12,6 @@ export async function createProvider(data: Provider) {
         const provider = {
             name: data.name,
             website: data.website || null,
-            docsUrl: data.docsUrl,
             supportLevel: data.supportLevel === "" ? null : data.supportLevel,
             notes: data.notes || null,
         };

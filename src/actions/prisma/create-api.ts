@@ -10,6 +10,7 @@ export async function createApiAction(data: FormData) {
             data: {
                 name: data.name,
                 key: data.key || null,
+                docsUrl: data.docsUrl || "",
                 description: data.description,
                 deprecated: data.deprecated,
                 provider: {

@@ -76,7 +76,7 @@ export default async function MyApiPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">{api?.description}</p>
-              
+              <Button variant={"link"} className="text-muted-foreground text-sm italic"><a href={api.docsUrl ?? ""} className="flex items-center gap-2">Documentation<ExternalLink/></a></Button>
               {/* API Key Section */}
               {api?.key && (
                 <>
@@ -120,17 +120,6 @@ export default async function MyApiPage({
                   </div>
                   <Separator />
                   <p className="text-sm text-muted-foreground">{provider.notes}</p>
-                  {provider.docsUrl && (
-                    <a
-                      href={provider.docsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline text-sm inline-flex items-center gap-2"
-                    >
-                      Documentación
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
                 </>
               ) : (
                 <p className="text-sm text-muted-foreground">

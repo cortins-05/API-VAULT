@@ -8,11 +8,11 @@ export interface ApiDraft {
   key?: string;
   description: string | null;
   deprecated: boolean;
+  docsUrl: string;
 
   // Provider fields
   provider: string | null;
   website: string | null;
-  docsUrl: string;
   supportLevel: "GOOD" | "AVERAGE" | "BAD" | null;
   notes: string | null;
 }
@@ -54,6 +54,7 @@ export interface FormData {
   /* API */
   name: string;
   key: string;
+  docsUrl: string;
   description: string;
   deprecated: boolean;
 

@@ -22,7 +22,7 @@ interface Props {
   update?: number;
 }
 
-export default function FormConfirm({ data, IA,update }: Props) {
+export default function FormConfirm({ data, IA, update }: Props) {
 
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,9 +39,8 @@ export default function FormConfirm({ data, IA,update }: Props) {
     key: data.key || "",
     description: data.description || "",
     deprecated: data.deprecated || false,
-
-    providerId: null
-
+    docsUrl: data.docsUrl || "",
+    providerId: Number(data.provider) || null
   });
 
   async function submit(e: FormEvent) {
@@ -50,6 +49,11 @@ export default function FormConfirm({ data, IA,update }: Props) {
 
     if(form.providerId==null||form.providerId==""){
       toast("No se ha seleccionado ningun proveedor.");
+      return;
+    }
+
+    if(form.name==""||form.description==""){
+      toast("No puede haber campos vacios.")
       return;
     }
     
@@ -141,6 +145,18 @@ export default function FormConfirm({ data, IA,update }: Props) {
                   value={form.key}
                   onChange={handleChange}
                   placeholder="Your API key"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="key">Docs URL</Label>
+                <Input
+                  id="docsUrl"
+                  name="docsUrl"
+                  type="text"
+                  value={form.docsUrl}
+                  onChange={handleChange}
+                  placeholder="https://example.com"
                 />
               </div>
 

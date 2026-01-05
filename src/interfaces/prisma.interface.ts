@@ -1,12 +1,12 @@
 export interface Eval {
-    id: number;
-    costValue: number;
-    performance: number;
-    stability: number;
-    support: number;
-    notes: string | null;
-    createdAt: Date;
-    apiId: number;
+  id: number;
+  costValue: number;
+  performance: number;
+  stability: number;
+  support: number;
+  notes: string | null;
+  createdAt: Date;
+  apiId: number;
 }
 
 export type ContextType = "RECOMMENDED" | "AVOID";
@@ -31,7 +31,6 @@ export interface Provider {
   id?: number;
   name: string;
   website: string | null;
-  docsUrl: string | null;
   supportLevel: "" | "GOOD" | "AVERAGE" | "BAD" | null;
   notes: string |null;
   apis?: number[];

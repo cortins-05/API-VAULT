@@ -25,9 +25,9 @@ export default async function EditApiPage({
     key: data.key || "",
     description: data.description,
     deprecated: data.deprecated,
-    provider: data.provider.name,
+    provider: String(data.providerId),
     website: data.provider.website,
-    docsUrl: data.provider.docsUrl || "",
+    docsUrl: data.docsUrl || "",
     supportLevel: data.provider.supportLevel,
     notes: data.provider.notes,
   };

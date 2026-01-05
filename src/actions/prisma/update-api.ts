@@ -48,18 +48,6 @@ export async function updateApi(data: FormData, id: number) {
             throw new Error('API no encontrada');
         }
 
-        // Actualizamos el Provider
-        await prisma.provider.update({
-            where: { id: existingApi.providerId },
-            data: {
-                name: data.provider,
-                website: data.website || null,
-                docsUrl: data.docsUrl,
-                supportLevel: data.supportLevel === "" ? null : data.supportLevel,
-                notes: data.notes || null,
-            },
-        });
-
         // Actualizamos la API
         await prisma.api.update({
             where: { id: apiId },
@@ -68,6 +56,7 @@ export async function updateApi(data: FormData, id: number) {
                 key: data.key || null,
                 description: data.description,
                 deprecated: data.deprecated,
+                docsUrl: data.docsUrl
             },
         });
 

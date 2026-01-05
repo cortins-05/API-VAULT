@@ -15,7 +15,6 @@ export default function FormProvider() {
     const emptyForm:Provider = {
         name: "",
         website: "",
-        docsUrl: "",
         supportLevel: "",
         notes: "",
     }
@@ -27,6 +26,11 @@ export default function FormProvider() {
     }
 
     async function saveProvider(){
+
+        if(form.name==""||form.website==""||form.supportLevel==""){
+            toast("No puede haber campos vacios");
+            return;
+        }
 
         await createProvider(form)
         .then(()=>{
@@ -75,23 +79,6 @@ export default function FormProvider() {
                         }))
                     }
                     placeholder="https://example.com"
-                />
-                </div>
-
-                <div className="space-y-2">
-                <Label htmlFor="docsUrl">Documentation URL</Label>
-                <Input
-                    id="docsUrl"
-                    name="docsUrl"
-                    type="url"
-                    value={String(form.docsUrl)}
-                    onChange={(e) =>
-                        setForm(prev => ({
-                            ...prev,
-                            [e.target.name]: e.target.value,
-                        }))
-                    }
-                    placeholder="https://docs.example.com"
                 />
                 </div>
 

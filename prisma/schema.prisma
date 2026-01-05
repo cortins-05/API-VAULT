@@ -23,7 +23,6 @@ model Provider {
   id           Int           @id @default(autoincrement())
   name         String
   website      String?
-  docsUrl      String?
   supportLevel SupportLevel?
   notes        String?
   createdAt    DateTime      @default(now())
@@ -35,6 +34,7 @@ model Api {
   id          Int       @id @default(autoincrement())
   name        String
   key         String?
+  docsUrl      String?
   providerId  Int                   // OBLIGATORIO
   description String?
   deprecated  Boolean   @default(false)
