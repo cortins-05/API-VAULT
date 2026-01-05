@@ -106,6 +106,7 @@ export default async function MyApiPage({
                 <>
                   <div>
                     <h4 className="font-semibold mb-2">{provider.name}</h4>
+                    <h4 className="text-sm mb-2">Support Level: <span className="text-yellow-300">{provider.supportLevel}</span></h4>
                     {provider.website && (
                       <a
                         href={provider.website}
