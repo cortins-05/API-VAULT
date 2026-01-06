@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "migrate": "npx prisma migrate deploy --schema=prisma/schema.prisma --url=$DIRECT_URL",
+    "migrate": "npx prisma migrate deploy --schema=prisma/schema.prisma",
     "generate": "npx prisma generate --schema=prisma/schema.prisma",
     "build": "npm run migrate && npm run generate && next build",
     "start": "next start",
