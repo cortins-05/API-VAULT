@@ -20,9 +20,9 @@ export default function SearchProviders({ providers }: Props) {
   );
 
   return (
-    <main className="h-full w-full flex flex-col gap-10 p-5">
+    <main className="h-full w-full flex flex-col gap-10 md:p-5">
 
-      <Button variant={"link"} className="absolute right-7"><Link href={"/actions/newProvider"}>Add One</Link></Button>
+      <Button variant={"link"} className="absolute right-0 md:right-7"><Link href={"/actions/newProvider"}>Add One</Link></Button>
 
       <div className="relative w-full max-w-md">
         {/* Icono dentro del input */}
@@ -34,13 +34,13 @@ export default function SearchProviders({ providers }: Props) {
         <Input
           type="text"
           placeholder="Buscar..."
-          className="pl-10 flex-1"
+          className="pl-10 w-5/7 md:flex-1"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
 
-      <div className="flex gap-20 flex-wrap">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 justify-center justify-items-center">
         {filteredApis.map(provider => (
           <ProviderComponent key={provider.id} provider={provider} />
         ))}

@@ -105,14 +105,14 @@ export default function FlagsCard({flags, apiId}:Props) {
                 {editId !== null && (
                     <div className="mb-6 p-4 border rounded-lg bg-muted/30">
                         <h4 className="font-semibold mb-4">Editando Flag</h4>
-                        <div className="flex flex-col md:flex-row gap-4 my-5">
+                        <div className="flex flex-col lg:flex-row gap-4 my-5">
                             <div className="space-y-2 flex-1 flex flex-col gap-2">
                                 <label className="text-sm font-medium">Razón</label>
                                 <Input 
                                     type="text" 
                                     placeholder="Describe el problema o información..." 
                                     value={reason || ""} 
-                                    className="text-xs md:text-sm"
+                                    className="text-xs lg:text-sm"
                                     onChange={(e) => setReason(e.target.value)} 
                                 />
                             </div>
@@ -130,7 +130,7 @@ export default function FlagsCard({flags, apiId}:Props) {
                                 </Select>
                             </div>
                         </div>
-                        <div className="flex gap-2 justify-center md:justify-start">
+                        <div className="flex gap-2 justify-center lg:justify-start">
                             <Button size="icon" variant="ghost" className="h-8 w-8" onClick={()=>handleAction()} disabled={isLoading}>
                                 <Check className="h-4 w-4 text-green-600" />
                             </Button>
@@ -147,7 +147,7 @@ export default function FlagsCard({flags, apiId}:Props) {
                     </div>
                 )}
                 {warnings.length + black.length + gray.length > 0 ? (
-                <div className="space-y-4 grid grid-cols-1 md:grid-cols-3">
+                <div className="space-y-4 grid grid-cols-1 lg:grid-cols-3">
                     {warnings.length > 0 && (
                     <div>
                         <h4 className="font-semibold text-amber-600 mb-2 flex items-center gap-2">

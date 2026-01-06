@@ -19,7 +19,7 @@ interface Props{
 
 export function ProviderComponent({provider}:Props) {
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full flex-1">
       <CardHeader>
         <CardTitle>{provider.name}</CardTitle>
         <CardDescription>

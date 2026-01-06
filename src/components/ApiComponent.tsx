@@ -18,7 +18,7 @@ import {
 
 export function ApiComponent({api}:Props) {
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="flex-1 w-full">
       <CardHeader>
         <CardTitle>{api.name}</CardTitle>
         <CardDescription>
@@ -28,7 +28,7 @@ export function ApiComponent({api}:Props) {
           <Button variant="link"><Link href={`/my-api/${api.id}`}>Show More</Link></Button>
         </CardAction>
       </CardHeader>
-      <CardFooter className="flex-col gap-6 ">
+      <CardFooter>
         <span className="text-gray-400 text-xs self-start">{format(api.createdAt, "dd MM yyyy")}</span>
       </CardFooter>
     </Card>

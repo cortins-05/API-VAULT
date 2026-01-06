@@ -116,7 +116,7 @@ export default function FormConfirm({ data, IA, update }: Props) {
       </div>
 
       <form className="space-y-6" onSubmit={submit}>
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-6">
           {/* API Fields Card */}
           <Card className="flex-2">
             <CardHeader>

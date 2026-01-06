@@ -25,8 +25,8 @@ export default async function ProviderDetailsPage({
   }
 
   return (
-    <div className="min-h-screen bg-background p-6 flex flex-col items-center gap-10">
-      <div className="w-4/5">
+    <div className="min-h-screen bg-background py-6 md:p-6 flex flex-col items-center gap-10">
+      <div className="w-7/8 md:w-4/5">
         
         <HeaderProvider provider={provider} id={id} />
 
@@ -35,7 +35,7 @@ export default async function ProviderDetailsPage({
 
       </div>
 
-      <div className="w-4/5 border border-border rounded-lg bg-card p-8 space-y-8">
+      <div className="w-7/8 md:w-4/5 border border-border rounded-lg bg-card p-8 space-y-8">
         {
           apisProviders.length > 0
           ?

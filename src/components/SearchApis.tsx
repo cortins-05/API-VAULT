@@ -48,7 +48,7 @@ export default function SearchApis({ apis }: Props) {
         />
       </div>
 
-      <div className="flex gap-20 flex-wrap">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 justify-center justify-items-center">
         {filteredApis.map(api => (
           <ApiComponent key={api.id} api={api} />
         ))}
