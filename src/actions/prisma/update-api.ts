@@ -40,8 +40,7 @@ export async function updateApi(data: FormData, id: number) {
 
         // Primero obtenemos la API para saber el providerId
         const existingApi = await prisma.api.findUnique({
-            where: { id: apiId },
-            select: { providerId: true }
+            where: { id: apiId }
         });
 
         if (!existingApi) {
@@ -56,7 +55,8 @@ export async function updateApi(data: FormData, id: number) {
                 key: data.key || null,
                 description: data.description,
                 deprecated: data.deprecated,
-                docsUrl: data.docsUrl
+                docsUrl: data.docsUrl,
+                providerId: data.providerId || existingApi.providerId
             },
         });
 
