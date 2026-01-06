@@ -16,6 +16,13 @@ Panel para catalogar, evaluar y vigilar APIs de terceros. Combina ingesta asisti
 ![ApiDetails](/photos/image4.png)
 
 ## Arquitectura y stack
+
+## Nuevas funcionalidades
+- Se ha añadido el componente `ApisPerProvider` para mostrar las APIs de un proveedor específico.
+- Se ha implementado la página `ProviderDetailsPage` para detallar información de un proveedor.
+- Se ha creado el componente `FlagsCard` para mostrar las banderas de las APIs.
+- Se han actualizado los componentes `ApiComponent`, `CreateFormConfirm`, `ProviderComponent`, `SearchApis` y `SearchProviders` para mejorar la funcionalidad y la experiencia del usuario.
+
 - Frontend: Next.js 16 (App Router), React 19, TailwindCSS 4, Radix UI, shadcn/ui, theming con next-themes.
 - Backend: Server Actions de Next, Prisma Client generado en `generated/prisma`, adaptador `@prisma/adapter-pg` y `pg` para PostgreSQL.
 - IA: `@google/genai` (Gemini 2.5 Flash) para ingesta factual con schema validation (Zod) y estrategia de reparación de JSON.
