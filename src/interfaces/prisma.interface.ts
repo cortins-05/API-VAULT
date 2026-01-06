@@ -27,11 +27,12 @@ export interface Flag {
   reason: string;
 }
 
+export type ProviderSupportLevel =  "" | "GOOD" | "AVERAGE" | "BAD" | null;
 export interface Provider {
   id?: number;
   name: string;
   website: string | null;
-  supportLevel: "" | "GOOD" | "AVERAGE" | "BAD" | null;
+  supportLevel: ProviderSupportLevel;
   notes: string |null;
   apis?: number[];
   createdAt?: Date;

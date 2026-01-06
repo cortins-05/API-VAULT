@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import HeaderProvider from './HeaderProvider';
 import InformationProvider from './InformationProvider';
 import ApisPerProvider from "./ApisPerProvider";
 import NoApisPerProvider from "./NoApisPerProvider";
@@ -27,11 +26,9 @@ export default async function ProviderDetailsPage({
   return (
     <div className="min-h-screen bg-background py-6 md:p-6 flex flex-col items-center gap-10">
       <div className="w-7/8 md:w-4/5">
-        
-        <HeaderProvider provider={provider} id={id} />
 
         {/* Card principal con la información */}
-        <InformationProvider provider={provider} />
+        <InformationProvider provider={provider} id={id} />
 
       </div>
 
