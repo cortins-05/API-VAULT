@@ -34,7 +34,7 @@ export default async function EditApiPage({
 
   return (
     <div className="p-6">
-      <FormConfirm IA={false} data={apiDraft} update={id} />
+      <FormConfirm data={apiDraft} update={id} />
     </div>
   );
 }
