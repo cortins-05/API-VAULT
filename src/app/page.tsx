@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main className="w-full h-full flex flex-col gap-20 items-center justify-center" >
 
-      <span className="text-6xl font-bold">
+      <span className="text-3xl md:text-6xl font-bold text-center">
         <ShimmeringText text="Welcome to" /> <RollingText className="text-blue-500" text="Api Vault"/>
       </span>
 
