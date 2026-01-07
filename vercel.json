@@ -1,0 +1,6 @@
+{
+  "crons": [{
+    "path": "/seed",
+    "schedule": "0 3 * * *"
+  }]
+}
