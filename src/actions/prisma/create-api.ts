@@ -21,9 +21,12 @@ export async function createApiAction(data: FormData) {
             },
         });
 
+        revalidatePath("/gestor-apis");
+        revalidatePath("/my-api");
         return true;
 
-    } catch {
+    } catch (err) {
+        console.error("Error al crear la API:", err);
         return false
     }
 }
