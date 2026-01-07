@@ -31,7 +31,7 @@ export default function SearchApis({ apis }: Props) {
 
   return (
     <main className="h-full w-full flex flex-col gap-10 p-5">
-      <Button variant={"link"} className="absolute right-7"><Link href={"/actions/createManually"}>Add One</Link></Button>
+      <Button variant={"link"} className="absolute right-0 md:right-7"><Link href={"/actions/createManually"}>Add One</Link></Button>
       <div className="relative w-full max-w-md">
         {/* Icono dentro del input */}
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -42,7 +42,7 @@ export default function SearchApis({ apis }: Props) {
         <Input
           type="text"
           placeholder="Buscar..."
-          className="pl-10 flex-1"
+          className="pl-10 w-5/7 md:flex-1"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
