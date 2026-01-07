@@ -1,7 +1,6 @@
 "use server";
 
 import { GoogleGenAI } from "@google/genai";
-import { z } from "zod";
 
 /* =======================
    Inicialización Gemini
@@ -11,115 +10,51 @@ const ai = new GoogleGenAI({
 });
 
 /* =======================
-   Schema FINAL
-======================= */
-const ApiDraftSchema = z.object({
-  // API fields
-  name: z.string(),
-  description: z.string().nullable(),
-  deprecated: z.boolean(),
-  
-  // Provider fields
-  provider: z.string().nullable(),
-  website: z.string().url().nullable(),
-  docsUrl: z.string().url(),
-  supportLevel: z.enum(["GOOD", "AVERAGE", "BAD"]).nullable(),
-  notes: z.string().nullable(),
-  
-  // Metadata fields
-  apiType: z.enum(["REST", "GraphQL", "gRPC", "WebSocket", "Unknown"]),
-  authMethods: z.array(z.string()),
-  hasOfficialSdk: z.array(z.string()),
-  pricingModel: z.enum([
-    "FREE",
-    "FREEMIUM",
-    "PAY_PER_USE",
-    "SUBSCRIPTION",
-    "UNKNOWN",
-  ]),
-  confidence: z.number().min(0).max(1),
-});
-
-/* =======================
-   Utilidades críticas
-======================= */
-function extractJson(text: string): string {
-  const match = text.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error("No JSON object found");
-  return match[0];
-}
-
-async function parseGeminiOutput(text: string) {
-  try {
-    return JSON.parse(extractJson(text));
-  } catch {
-    return null;
-  }
-}
-
-/* =======================
    PROMPT PERFECTO (FINAL)
 ======================= */
-function buildPrompt(name: string, docsUrl: string) {
+function buildPrompt(API_NAME: string, DOCS_URL: string) {
   return `
 ROLE:
-You are a senior API analyst and software architect.
+You are a senior technical writer and API analyst.
 
 MISSION:
-Extract factual, verifiable technical metadata from an official API documentation to populate the Provider and Api database models.
+Write a factual, technical, and structured description of an API using ONLY its official documentation.
 
 STRICT RULES:
-- Use ONLY the provided documentation URL as the source of truth.
-- Do NOT guess, infer, assume or extrapolate.
-- If a value cannot be explicitly verified, return null.
-- Do NOT use prior knowledge.
-- Do NOT include explanations, comments or markdown.
-- The output MUST be valid JSON.
-- The output MUST start with '{' and end with '}'.
+- Use ONLY the provided official documentation URL as the source of truth.
+- Do NOT guess, infer, assume, extrapolate, or use prior knowledge.
+- If a detail is not explicitly documented, omit it.
+- Do NOT mention the documentation, the analysis process, or yourself.
+- Do NOT include examples unless they are explicitly described in the documentation.
+- Do NOT include headings, bullet points, numbering, markdown, or formatting.
+- The output MUST be plain text and contain ONLY the API description.
 
 INPUT:
-API name: ${name}
-Official documentation URL: ${docsUrl}
+API name: ${API_NAME}
+Official documentation URL: ${DOCS_URL}
 
-FIELDS DEFINITION:
+STYLE AND CONTENT GUIDELINES:
+Write in Spanish.
+Use clear, technical, and neutral language.
+Structure the description in short, well-defined paragraphs.
+Keep the description concise and information-dense.
+Avoid marketing language, filler phrases, and generic statements.
 
-API FIELDS:
-- name: API name as documented
-- description: Clear, concise description of what the API does (from official docs)
-- deprecated: boolean (true only if explicitly marked as deprecated in official docs)
+DESCRIPTION SCOPE:
+When explicitly documented, include:
+- The purpose and core functionality of the API
+- The main endpoints or interaction model
+- The types of models, services, or resources it exposes
+- Typical use cases and intended users
+- Authentication and high-level interaction flow
+- Notable capabilities, limits, or constraints
 
-PROVIDER FIELDS:
-- provider: Company or organization name that owns/maintains the API
-- website: Official website URL of the provider
-- docsUrl: Official documentation URL (same as input)
-- supportLevel: Choose from (GOOD: responsive support, AVERAGE: standard support, BAD: minimal/no support), or null if not documented
-- notes: Any relevant additional information about the provider or API (compatibility notes, requirements, etc.)
-
-METADATA FIELDS:
-- apiType: choose ONLY if explicitly stated (REST, GraphQL, gRPC, WebSocket, Unknown)
-- authMethods: only authentication methods clearly documented (e.g., API Key, OAuth 2.0, JWT)
-- hasOfficialSdk: list ONLY officially supported SDK languages/platforms
-- pricingModel: choose UNKNOWN unless pricing is clearly documented
-- confidence: number between 0 and 1 representing certainty of correctness for extracted data
-
-OUTPUT:
-Return EXACTLY this JSON schema and nothing else:
-
-{
-  "name": string,
-  "description": string | null,
-  "deprecated": boolean,
-  "provider": string | null,
-  "website": string | null,
-  "docsUrl": string,
-  "supportLevel": "GOOD" | "AVERAGE" | "BAD" | null,
-  "notes": string | null,
-  "apiType": "REST" | "GraphQL" | "gRPC" | "WebSocket" | "Unknown",
-  "authMethods": string[],
-  "hasOfficialSdk": string[],
-  "pricingModel": "FREE" | "FREEMIUM" | "PAY_PER_USE" | "SUBSCRIPTION" | "UNKNOWN",
-  "confidence": number
-}
+FINAL OUTPUT CONSTRAINTS:
+- Return a single plain-text string.
+- Do NOT add introductions or conclusions.
+- Do NOT add meta commentary of any kind.
+- Do NOT explain what the API is “designed to do” unless stated in the documentation.
+- Output ONLY the API description text.
 `;
 }
 
@@ -127,14 +62,14 @@ Return EXACTLY this JSON schema and nothing else:
    ACTION PRINCIPAL
 ======================= */
 export async function ingestApiWithGemini(
-  name: string,
-  docsUrl: string
+  API_NAME: string,
+  DOCS_URL: string
 ) {
-  if (!name || !docsUrl) {
+  if (!API_NAME || !DOCS_URL) {
     throw new Error("Missing required input");
   }
 
-  new URL(docsUrl); // valida URL
+  new URL(DOCS_URL); // valida URL
 
   /* === Primera llamada === */
   const response = await ai.models.generateContent({
@@ -142,49 +77,10 @@ export async function ingestApiWithGemini(
     contents: [
       {
         role: "user",
-        parts: [{ text: buildPrompt(name, docsUrl) }],
+        parts: [{ text: buildPrompt(API_NAME, DOCS_URL) }],
       },
     ],
   });
 
-  let parsed = await parseGeminiOutput(response.text!);
-
-  /* === Reintento automático (repair) === */
-  if (!parsed) {
-    const repair = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              text: `
-Fix the following output so it becomes VALID JSON ONLY.
-Do NOT change the data.
-Do NOT add or remove fields.
-Return ONLY the corrected JSON.
-
-BROKEN OUTPUT:
-${response.text}
-`,
-            },
-          ],
-        },
-      ],
-    });
-
-    parsed = await parseGeminiOutput(repair.text!);
-  }
-
-  if (!parsed) {
-    throw new Error("Gemini failed to return valid JSON");
-  }
-
-  /* === Validación final === */
-  const validated = ApiDraftSchema.safeParse(parsed);
-  if (!validated.success) {
-    throw new Error("Schema validation failed");
-  }
-
-  return validated.data; // DRAFT listo para revisión humana
+  return response.text; // DRAFT listo para revisión humana
 }

@@ -8,25 +8,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { createApiAction } from "@/actions/prisma/create-api";
-import { ReloadGuard } from "@/helpers/BeforeUnload";
 import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
 import { redirect } from "next/navigation";
 import { updateApi } from "@/actions/prisma/update-api";
 import { toast } from "sonner";
 import { getProviders } from "@/actions/prisma/create-provider";
 import { Provider } from "@/interfaces/prisma.interface";
+import { Star, Zap } from 'lucide-react';
+import { ingestApiWithGemini } from "@/actions/ai/ingest-api";
+import { Spinner } from "./ui/spinner";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface Props {
   data: ApiDraft;
-  IA: boolean;
   update?: number;
 }
 
-export default function FormConfirm({ data, IA, update }: Props) {
+export default function FormConfirm({ data, update }: Props) {
 
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [providers, setProviders] = useState<Provider[]>([]);
+  const [isIA, setIsIa] = useState<boolean>(false);
 
   const getProv = async()=>{
     await getProviders().then(res=>{setProviders(res)});
@@ -42,6 +54,26 @@ export default function FormConfirm({ data, IA, update }: Props) {
     docsUrl: data.docsUrl || "",
     providerId: Number(data.provider) || null
   });
+
+  async function geminiDescriptionInline() {
+    if(form.name==""||form.docsUrl==""){
+      toast("No es valida la informacion propuesta para la descripcion con IA.");
+      return;
+    }
+    setIsIa(true);
+    await ingestApiWithGemini(form.name,form.docsUrl)
+    .then((result)=>{
+      if(!result){
+        toast("La descripcion en linea cayo en un error.");
+        return;
+      }
+      setForm((prev)=>({
+        ...prev,
+        description: result
+      }))
+      setIsIa(false);
+    });
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -96,27 +128,24 @@ export default function FormConfirm({ data, IA, update }: Props) {
     }));
   };
 
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-
+  const handleSelectChange = (e: string) => {
+    console.log(e);
     setForm(prev => ({
       ...prev,
-      [name]: value === "" ? null : Number(value),
+      providerId: Number(e),
     }));
   };
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8 p-6">
-      <ReloadGuard enabled={IA} />
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight"> { IA ?'Confirm API Information' : 'Create New Api'}</h1>
-        <p className="text-muted-foreground">
-          {IA ?? 'Review the extracted data and make any necessary corrections'}
-        </p>
+      <div className="text-center flex justify-center gap-4">
+        <Star color="green" size={35}/>
+        <h1 className="text-3xl font-bold tracking-tight"> Create New API </h1>
+        <Star color="green" size={35}/>
       </div>
 
       <form className="space-y-6" onSubmit={submit}>
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
           {/* API Fields Card */}
           <Card className="flex-2">
             <CardHeader>
@@ -161,7 +190,17 @@ export default function FormConfirm({ data, IA, update }: Props) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">
+                  Description <span className="ml-auto" > <Button size="sm" type="button" onClick={geminiDescriptionInline}>
+                    {
+                      isIA
+                      ?
+                        <Spinner/>
+                      :
+                        <Zap/>
+                    } 
+                  </Button> </span> 
+                </Label>
                 <Textarea
                   id="description"
                   name="description"
@@ -196,21 +235,25 @@ export default function FormConfirm({ data, IA, update }: Props) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="apiType">Provider(s)</Label>
-                <select
-                  id="providerId"
+                <Select
+                  value={form.providerId ? String(form.providerId) : undefined}
+                  onValueChange={(e)=>{handleSelectChange(e)}}
                   name="providerId"
-                  value={form.providerId ?? ""}
-                  onChange={handleSelectChange}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <option value={undefined}>Select a provider</option>
-                  {
-                    providers.map(provider=>(
-                      <option key={provider.id} value={provider.id}>{provider.name}</option>
-                    ))
-                  }
-                </select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Provider(s)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>NAMEs</SelectLabel>
+                      {
+                        providers.map(provider=>(
+                          <SelectItem key={provider.id} value={String(provider.id)}>{provider.name}</SelectItem>
+                        ))
+                      }
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
             </CardContent>
           </Card>

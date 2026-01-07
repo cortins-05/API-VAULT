@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/components/shadcn/theme-provider"
 import ThemeToggle from '../components/themeToggle';
 import { NavGroup } from "@/interfaces/navbar.interface";
 import { Footer } from '../components/Footer';
-import { Clapperboard, Hammer, ChartNoAxesGantt, Zap, ChessQueen, House } from "lucide-react";
+import { Clapperboard, ChartNoAxesGantt, ChessQueen, House, Star } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
@@ -48,14 +48,9 @@ const data:NavGroup[] = [
         icon: <ChessQueen color="pink" />
       },
       {
-        title: "IA CREATION",
-        url: "/actions/createIA",
-        icon: <Zap color="lab(76.3898% 14.5258 98.4589)" />
-      },
-      {
-        title: "MANUAL CREATION",
-        url: "/actions/createManually",
-        icon: <Hammer color="red" />
+        title: "NEW API",
+        url: "/actions/newApi",
+        icon: <Star color="green" />
       }
     ]
   }
