@@ -2,12 +2,22 @@ import FormConfirm from '@/components/CreateFormConfirm'
 import { prisma } from "@/lib/prisma";
 import { redirect } from 'next/navigation';
 import { ApiDraft } from '@/interfaces/gemini.interface';
+import { getUserId } from "@/actions/auth/getUserId";
+import ErrorAuthPage from "../../errorAuth/page";
 
 export default async function EditApiPage({
   params,
 }: {
   params: Promise<{ id: number }>;
 }) {
+
+  const userId = await getUserId();
+
+  if(!userId){
+    return(
+      <ErrorAuthPage/>
+    );
+  }
 
   const {id} = await params;
 

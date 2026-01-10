@@ -15,7 +15,7 @@ export const signUpUser = async (
 ): Promise<SignUpResult> => {
   try {
     await signUp.email(
-      { name, email, password },
+      { name, email, password, callbackURL: "/auth/login"},
       {
         onError: (ctx) => {
           throw new Error(ctx.error.message);

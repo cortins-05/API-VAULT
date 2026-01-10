@@ -3,12 +3,22 @@ import { redirect } from "next/navigation";
 import InformationProvider from './InformationProvider';
 import ApisPerProvider from "./ApisPerProvider";
 import NoApisPerProvider from "./NoApisPerProvider";
+import { getUserId } from "@/actions/auth/getUserId";
+import ErrorAuthPage from "../../errorAuth/page";
 
 export default async function ProviderDetailsPage({
   params,
 }: {
   params: Promise<{ id: number }>;
 }) {
+  const userId = await getUserId();
+
+  if(!userId){
+    return(
+      <ErrorAuthPage/>
+    );
+  }
+
   const { id } = await params;
 
   if (isNaN(id)) {

@@ -2,10 +2,24 @@ export const dynamic = 'force-dynamic'
 
 import { prisma } from "@/lib/prisma";
 import SearchProviders from "@/components/SearchProvideers";
+import { getUserId } from "@/actions/auth/getUserId";
+import ErrorAuthPage from "../errorAuth/page";
 
 export default async function GestorApisPage() {
   
-  const providers = await prisma.provider.findMany();
+  const userId = await getUserId();
+
+  if(!userId){
+    return(
+      <ErrorAuthPage/>
+    );
+  }
+
+  const providers = await prisma.provider.findMany({
+    where: {
+      user_id: userId
+    }
+  });
   
   return (
     <main className="h-full w-full flex flex-col gap-10 p-5">

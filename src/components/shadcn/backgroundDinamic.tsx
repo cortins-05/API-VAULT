@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { RollingText } from '../text/rolling-text';
 import { ShimmeringText } from '../text/shmiring-text';
 import { TextGenerateEffect } from '../text/text-generate-effect';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
     id: i,
@@ -81,6 +83,10 @@ export function BackgroundPaths({title,titleDestacable,subtitle}:Props) {
               duration={1}
               staggerDelay={1}
             />
+          </div>
+
+          <div className='mt-30'>
+            <Button variant={"outline"} size={"lg"}><Link href={"/auth/register"} className='text-2xl' >Register</Link></Button>
           </div>
         </motion.div>
       </div>

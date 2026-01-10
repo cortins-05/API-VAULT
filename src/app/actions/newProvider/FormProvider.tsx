@@ -6,12 +6,15 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Provider } from "@/interfaces/prisma.interface";
+import { useSession } from "@/lib/auth-client";
 import { Label } from "@radix-ui/react-label";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {toast} from "sonner";
 
 export default function FormProvider() {
+
+    const session = useSession();
 
     const router = useRouter();
 
@@ -20,6 +23,7 @@ export default function FormProvider() {
         website: "",
         supportLevel: "",
         notes: "",
+        userId: session.data!.user.id
     }
 
     const [form, setForm] = useState<Provider>(emptyForm);

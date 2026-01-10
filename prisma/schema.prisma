@@ -22,12 +22,15 @@ enum SupportLevel {
 model Provider {
   id           Int           @id @default(autoincrement())
   name         String
+  user_id      String
   website      String?
   supportLevel SupportLevel?
   notes        String?
   createdAt    DateTime      @default(now())
 
-  apis Api[] // 1 Provider → N Apis
+  user         User          @relation(fields: [user_id],references: [id])
+
+  apis Api[]
 }
 
 model Api {
@@ -121,6 +124,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+
+  providers     Provider[]
 
   @@unique([email])
   @@map("user")

@@ -6,18 +6,21 @@ export async function getProviders() {
     return await prisma.provider.findMany();
 }
 
-export async function createProvider(data: Provider) {
+export async function createProvider({name,website,supportLevel,notes,userId}: Provider) {
     try {
 
-        const provider = {
-            name: data.name,
-            website: data.website || null,
-            supportLevel: data.supportLevel === "" ? null : data.supportLevel,
-            notes: data.notes || null,
-        };
-
         await prisma.provider.create({
-            data: provider,
+            data: {
+                name,
+                website,
+                supportLevel: supportLevel=='' ? null : supportLevel,
+                notes,
+                user: {
+                    connect: {
+                        id: userId
+                    }
+                }
+            }
         });
 
         return true;

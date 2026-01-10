@@ -20,6 +20,10 @@ import {
 } from "@/components/ui/sidebar"
 import { NavGroup } from "@/interfaces/navbar.interface"
 import Link from "next/link"
+import SignInOutButton from '../SignInOutButton';
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import Image from "next/image"
 
 interface Props {
   data: NavGroup[];
@@ -28,17 +32,31 @@ interface Props {
 type AppSidebarProps =
   React.ComponentProps<typeof Sidebar> & Props
 
-export function AppSidebar({ data, ...props }: AppSidebarProps) {
+export async function AppSidebar({ data, ...props }: AppSidebarProps) {
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const userImage = session?.user.image as string ;
+
   return (
-    <Sidebar {...props}>
+    <Sidebar {...props} className="h-full">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <GalleryVerticalEnd className="size-4" />
-                </div>
+                
+                {
+                  userImage
+                  ?
+                  <Image width={40} height={40} className="rounded-xl" alt="avatar" src={String(userImage)} />
+                  :
+                  <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                    <GalleryVerticalEnd className="size-4" />
+                  </div>
+                }
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-medium">Dashboard</span>
                   <span className="">v1.0.0</span>
@@ -104,6 +122,7 @@ export function AppSidebar({ data, ...props }: AppSidebarProps) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
+      <SignInOutButton/>
     </Sidebar>
   )
 }

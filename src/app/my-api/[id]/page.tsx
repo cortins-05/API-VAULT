@@ -13,12 +13,22 @@ import { MemoriesCard } from "./components/MemoriesCard";
 import EvaluationCard from './components/EvaluationsCard';
 import ContextsCard from './components/ContextsCard';
 import FlagsCard from './components/FlagsCard';
+import { getUserId } from "@/actions/auth/getUserId";
+import ErrorAuthPage from "../../errorAuth/page";
 
 export default async function MyApiPage({
   params,
 }: {
   params: Promise<{ id: number }>;
 }) {
+  const userId = await getUserId();
+
+  if(!userId){
+    return(
+      <ErrorAuthPage/>
+    );
+  }
+
   const { id } = await params;
 
   if (isNaN(id)) {

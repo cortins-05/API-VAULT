@@ -18,6 +18,7 @@ export const signInUser = async (
         email,
         password,
         rememberMe: false,
+        callbackURL: "/profile"
       },
       {
         onError: (ctx) => {

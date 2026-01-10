@@ -10,6 +10,7 @@ import { NavGroup } from "@/interfaces/navbar.interface";
 import { Footer } from '../components/Footer';
 import { Clapperboard, ChartNoAxesGantt, ChessQueen, House, Star } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner"
+import { getSession } from "@/actions/auth/getUserId";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,11 +57,14 @@ const data:NavGroup[] = [
   }
 ]
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session = await getSession();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -73,9 +77,14 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider>
-              <AppSidebar
-                data={data}
-              />
+              {
+                session 
+                && 
+                <AppSidebar
+                  data={data}
+                />
+              }
+              
               <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
                   <SidebarTrigger className="-ml-1" />

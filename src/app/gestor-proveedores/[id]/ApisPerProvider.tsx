@@ -1,5 +1,5 @@
 import { ApiComponent } from "@/components/ApiComponent";
-import { Api } from "../../../../generated/prisma/client";
+import { Api } from "@/generated/prisma/client";
 
 interface Props {
   apis: Api[];
