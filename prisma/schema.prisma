@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -27,27 +27,26 @@ model Provider {
   notes        String?
   createdAt    DateTime      @default(now())
 
-  apis         Api[]         // 1 Provider → N Apis
+  apis Api[] // 1 Provider → N Apis
 }
 
 model Api {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   key         String?
   docsUrl     String?
   providerId  Int
   description String?
-  deprecated  Boolean   @default(false)
-  createdAt   DateTime  @default(now())
+  deprecated  Boolean  @default(false)
+  createdAt   DateTime @default(now())
 
-  provider    Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  provider Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
 
-  memories    ApiMemory[]
-  evaluation  ApiEvaluation?
-  flags       ApiFlag[]
-  contexts    ApiContext[]
+  memories   ApiMemory[]
+  evaluation ApiEvaluation?
+  flags      ApiFlag[]
+  contexts   ApiContext[]
 }
-
 
 enum MemoryType {
   BUG
@@ -58,26 +57,26 @@ enum MemoryType {
 }
 
 model ApiMemory {
-  id        Int       @id @default(autoincrement())
-  apiId     Int
-  type      MemoryType
-  content   String
-  project   String?
+  id         Int        @id @default(autoincrement())
+  apiId      Int
+  type       MemoryType
+  content    String
+  project    String?
   occurredAt DateTime?
-  createdAt DateTime  @default(now())
+  createdAt  DateTime   @default(now())
 
-  api       Api       @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  api Api @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }
 
 model ApiEvaluation {
-  id           Int      @id @default(autoincrement())
-  apiId        Int      @unique
-  stability    Int
-  costValue    Int
-  performance  Int
-  support      Int
-  notes        String?
-  createdAt    DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  apiId       Int      @unique
+  stability   Int
+  costValue   Int
+  performance Int
+  support     Int
+  notes       String?
+  createdAt   DateTime @default(now())
 
   api Api @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }
@@ -89,13 +88,13 @@ enum FlagLevel {
 }
 
 model ApiFlag {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   apiId     Int
   level     FlagLevel
   reason    String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
-  api       Api      @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  api Api @relation(fields: [apiId], references: [id], onDelete: Cascade)
 }
 
 enum ContextType {
@@ -104,10 +103,73 @@ enum ContextType {
 }
 
 model ApiContext {
-  id        Int         @id @default(autoincrement())
-  apiId     Int
-  type      ContextType
-  context   String
+  id      Int         @id @default(autoincrement())
+  apiId   Int
+  type    ContextType
+  context String
 
-  api       Api         @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  api Api @relation(fields: [apiId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
