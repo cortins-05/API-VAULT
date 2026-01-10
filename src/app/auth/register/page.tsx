@@ -1,5 +1,4 @@
 import { SignupForm } from "@/components/signup-form"
-import { signIn, signUp } from "@/lib/auth-client"
 
 export default function RegisterPage() {
     return (
