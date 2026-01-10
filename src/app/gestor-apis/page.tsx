@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import { prisma } from "@/lib/prisma";
 import SearchApis from '../../components/SearchApis';
 import { getUserId } from "@/actions/auth/getUserId";
-import ErrorAuthPage from "../errorAuth/page";
+import ErrorAuthPage from "@/app/errorAuth/page";
 
 export default async function GestorApisPage() {
 

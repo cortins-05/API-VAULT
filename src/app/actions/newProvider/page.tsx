@@ -1,6 +1,6 @@
 import FormProvider from "./FormProvider";
 import { getUserId } from "@/actions/auth/getUserId";
-import ErrorAuthPage from "../../errorAuth/page";
+import ErrorAuthPage from "@/app/errorAuth/page";
 
 export default async function NewApiIAPage() {
   

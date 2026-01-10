@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { createApiAction } from "@/actions/prisma/create-api";
 import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { updateApi } from "@/actions/prisma/update-api";
 import { toast } from "sonner";
 import { getProviders } from "@/actions/prisma/create-provider";
@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useSession } from "@/lib/auth-client";
 
 interface Props {
   data: ApiDraft;
@@ -39,12 +40,21 @@ export default function FormConfirm({ data, update }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [providers, setProviders] = useState<Provider[]>([]);
   const [isIA, setIsIa] = useState<boolean>(false);
+  const router = useRouter();
+
+  const user_id = useSession().data?.user.id;
 
   const getProv = async()=>{
-    await getProviders().then(res=>{setProviders(res)});
+    await getProviders(user_id!).then(res=>{setProviders(res)});
   }
 
-  useEffect(() => { getProv(); }, [])
+  useEffect(() => {
+    if(!user_id){
+      router.push("/");
+      return;
+    };
+    getProv();
+  }, []);
 
   const [form, setForm] = useState<FormData>({
     name: data.name || "",
@@ -99,9 +109,9 @@ export default function FormConfirm({ data, update }: Props) {
       }
       setTimeout(() => {
         if(update){
-          redirect(`/my-api/${update}`);
+          router.push(`/my-api/${update}`);
         }else{
-          redirect("/gestor-apis");
+          router.push("/gestor-apis");
         }
       }, 2000);
     } catch(error) {
@@ -260,7 +270,7 @@ export default function FormConfirm({ data, update }: Props) {
         </div>
 
         <div className="mt-10 flex justify-end gap-4">
-          <Button type="button" variant="outline" onClick={()=>{redirect(`/my-api/${update}`)}} disabled={isSubmitting}>
+          <Button type="button" variant="outline" onClick={()=>{router.push(`/my-api/${update}`)}} disabled={isSubmitting}>
             Cancel
           </Button>
           <Button type="submit" disabled={isSubmitting}>
@@ -279,9 +289,9 @@ export default function FormConfirm({ data, update }: Props) {
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => {
                 if(update){
-                  redirect(`/my-api/${update}`);
+                  router.push(`/my-api/${update}`);
                 }else{
-                  redirect("/gestor-apis")
+                  router.push("/gestor-apis")
                 }
             }}>Aceptar</AlertDialogAction>
           </AlertDialogFooter>

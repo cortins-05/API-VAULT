@@ -14,7 +14,7 @@ import EvaluationCard from './components/EvaluationsCard';
 import ContextsCard from './components/ContextsCard';
 import FlagsCard from './components/FlagsCard';
 import { getUserId } from "@/actions/auth/getUserId";
-import ErrorAuthPage from "../../errorAuth/page";
+import ErrorAuthPage from "@/app/errorAuth/page";
 
 export default async function MyApiPage({
   params,

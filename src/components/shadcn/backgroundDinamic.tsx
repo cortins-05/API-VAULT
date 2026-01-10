@@ -5,6 +5,8 @@ import { ShimmeringText } from '../text/shmiring-text';
 import { TextGenerateEffect } from '../text/text-generate-effect';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useSession } from '@/lib/auth-client';
+
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
     id: i,
@@ -18,6 +20,9 @@ function FloatingPaths({ position }: { position: number }) {
     color: `rgba(15,23,42,${0.1 + i * 0.03})`,
     width: 0.5 + i * 0.03,
   }));
+
+  
+
   return (
     <div className="absolute inset-0 pointer-events-none">
       <svg
@@ -59,6 +64,9 @@ interface Props {
 }
 
 export function BackgroundPaths({title,titleDestacable,subtitle}:Props) {
+  
+  const session = useSession();
+
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950">
       <div className="absolute inset-0">
@@ -85,9 +93,14 @@ export function BackgroundPaths({title,titleDestacable,subtitle}:Props) {
             />
           </div>
 
-          <div className='mt-30'>
-            <Button variant={"outline"} size={"lg"}><Link href={"/auth/register"} className='text-2xl' >Register</Link></Button>
-          </div>
+          {
+            !session.data?.user.id
+            &&
+            <div className='mt-30'>
+              <Button variant={"outline"} size={"lg"}><Link href={"/auth/register"} className='text-2xl' >Register</Link></Button>
+            </div>
+          }
+          
         </motion.div>
       </div>
     </div>

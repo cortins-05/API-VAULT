@@ -1,32 +1,24 @@
-"use client"
-
 import { emptyApiDraft } from "@/interfaces/gemini.interface";
 import FormConfirm from '@/components/CreateFormConfirm'
 import { getProviders } from "@/actions/prisma/create-provider";
-import { useState, useEffect } from "react";
 import NoProvidersError from "@/components/NoProvidersError";
-import { Provider } from "@/interfaces/prisma.interface";
-import { useSession } from "@/lib/auth-client";
-import ErrorAuthPage from "../../errorAuth/page";
+import { getUserId } from "@/actions/auth/getUserId";
+import ErrorAuthPage from "@/app/errorAuth/page";
 
-export default function NewApiIAPage() {
+export default async function NewApiIAPage() {
 
-  const [providers, setProviders] = useState<Provider[]>([]);
-  const session = useSession();
-    
-  const getProv = async()=>{
-    await getProviders().then(res=>{setProviders(res)});
+  const userId = await getUserId();
+
+  if(!userId){
+    return(
+      <ErrorAuthPage/>
+    );
   }
-  
-  useEffect(() => { getProv(); }, [])
 
-  if(!session.data?.user) {
-    return <ErrorAuthPage/>
-  }
+  const providers = await getProviders(userId);
 
   return (
     <div className="p-6">
-      
       {
         providers.length > 0
         ?
@@ -34,7 +26,6 @@ export default function NewApiIAPage() {
         :
         <NoProvidersError/>
       }
-      
     </div>
   );
 }

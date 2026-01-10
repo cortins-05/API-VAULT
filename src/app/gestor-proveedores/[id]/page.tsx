@@ -4,7 +4,7 @@ import InformationProvider from './InformationProvider';
 import ApisPerProvider from "./ApisPerProvider";
 import NoApisPerProvider from "./NoApisPerProvider";
 import { getUserId } from "@/actions/auth/getUserId";
-import ErrorAuthPage from "../../errorAuth/page";
+import ErrorAuthPage from "@/app/errorAuth/page";
 
 export default async function ProviderDetailsPage({
   params,

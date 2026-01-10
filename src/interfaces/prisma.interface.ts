@@ -36,5 +36,5 @@ export interface Provider {
   notes: string |null;
   apis?: number[];
   createdAt?: Date;
-  userId: string;
+  userId?: string;
 }

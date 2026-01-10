@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from 'next/navigation';
 import { ApiDraft } from '@/interfaces/gemini.interface';
 import { getUserId } from "@/actions/auth/getUserId";
-import ErrorAuthPage from "../../errorAuth/page";
+import ErrorAuthPage from '@/app/errorAuth/page';
 
 export default async function EditApiPage({
   params,

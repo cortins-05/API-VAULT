@@ -2,8 +2,12 @@
 import { Provider } from '@/interfaces/prisma.interface'
 import { prisma } from '@/lib/prisma'
 
-export async function getProviders() {
-    return await prisma.provider.findMany();
+export async function getProviders(user_id:string) {
+    return await prisma.provider.findMany({
+        where: {
+            user_id
+        }
+    });
 }
 
 export async function createProvider({name,website,supportLevel,notes,userId}: Provider) {
