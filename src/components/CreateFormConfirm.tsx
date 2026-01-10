@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { createApiAction } from "@/actions/prisma/create-api";
 import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { updateApi } from "@/actions/prisma/update-api";
 import { toast } from "sonner";
 import { getProviders } from "@/actions/prisma/create-provider";

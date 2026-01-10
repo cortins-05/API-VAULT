@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Flag } from "@/interfaces/prisma.interface";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
-import { FlagLevel } from "../@/generated/prisma/enums";
+import { FlagLevel } from "@/generated/prisma/enums";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { BadgePlus, Check, X } from "lucide-react";
