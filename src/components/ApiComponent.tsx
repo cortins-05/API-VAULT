@@ -1,4 +1,4 @@
-import { Api } from "../../generated/prisma/client";
+import { Api } from "@/generated/prisma/client";
 import {format} from "date-fns";
 
 interface Props{
