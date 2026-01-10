@@ -6,7 +6,7 @@
     "dev": "next dev",
     "migrate": "npx prisma migrate deploy --schema=prisma/schema.prisma",
     "generate": "npx @better-auth/cli generate && npx prisma generate --schema=prisma/schema.prisma",
-    "build": "npm run generate && next build",
+    "build": "npm run generate && npm run migrate && next build",
     "start": "next start",
     "lint": "eslint"
   },
