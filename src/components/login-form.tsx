@@ -16,7 +16,6 @@ import Link from "next/link"
 import { useState, FormEvent } from "react"
 import { signInUser } from "@/actions/auth/sign-in"
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { LoginProviders } from './logginSocialButtons';
 import { Spinner } from './ui/spinner';
 
@@ -29,7 +28,6 @@ export function LoginForm({
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
 
   async function submit(e:FormEvent){
     e.preventDefault();
@@ -42,7 +40,6 @@ export function LoginForm({
       return;
     }
     setCargando(false);
-    router.push("/");
   }
 
   return (

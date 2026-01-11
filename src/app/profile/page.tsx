@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { CalendarDays, Mail, CheckCircle2, XCircle } from "lucide-react";
 import { getSessionUser } from "@/actions/auth/getUserId";
+import { BotonesFinales } from "./BotonesFinales";
 
 export default async function ProfilePage() {
 
@@ -93,6 +94,9 @@ export default async function ProfilePage() {
             </div>
           </div>
         </CardContent>
+        <CardFooter>
+          <BotonesFinales emailVerified={user.emailVerified} />
+        </CardFooter>
       </Card>
     </div>
   );

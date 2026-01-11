@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/components/shadcn/theme-provider"
 import ThemeToggle from '../components/themeToggle';
 import { NavGroup } from "@/interfaces/navbar.interface";
 import { Footer } from '../components/Footer';
-import { Clapperboard, ChartNoAxesGantt, ChessQueen, House, Star } from "lucide-react";
+import { Clapperboard, ChartNoAxesGantt, ChessQueen, House, Star, PersonStanding } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner"
 import { getSession } from "@/actions/auth/getUserId";
 
@@ -28,6 +28,11 @@ export const metadata: Metadata = {
 };
 
 const data:NavGroup[] = [
+  {
+    title: "Profile",
+    url: "/profile",
+    icon: <PersonStanding/>
+  },
   {
     title: "Gestor de Proveedores",
     url: "/gestor-proveedores",
