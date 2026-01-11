@@ -31,7 +31,7 @@ export default function SignInOutButton() {
     <Button
       variant="destructive"
       onClick={cerrarSesion}
-      className="cursor-pointer"
+      className="cursor-pointer mb-5 mx-5"
       disabled={isLoading}
     >
       {isLoading ? "Cerrando..." : "Logout"}

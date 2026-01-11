@@ -6,6 +6,7 @@ import { TextGenerateEffect } from '../text/text-generate-effect';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useSession } from '@/lib/auth-client';
+import { LucideMailWarning } from "lucide-react";
 
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -67,6 +68,10 @@ export function BackgroundPaths({title,titleDestacable,subtitle}:Props) {
   
   const session = useSession();
 
+  const emailVerified = session.data?.user.emailVerified;
+
+  const aviso = emailVerified === false;
+
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950">
       <div className="absolute inset-0">
@@ -97,12 +102,19 @@ export function BackgroundPaths({title,titleDestacable,subtitle}:Props) {
             !session.data?.user.id
             &&
             <div className='mt-30'>
-              <Button variant={"outline"} size={"lg"}><Link href={"/auth/register"} className='text-2xl' >Register</Link></Button>
+              <Button variant={"outline"} size={"lg"}><Link href={"/auth/login"} className='text-2xl' >Sign In</Link></Button>
             </div>
           }
           
         </motion.div>
       </div>
+      {
+        aviso
+        &&
+        <Link className='absolute top-5 left-5 bg-accent p-5 rounded-2xl font-bold flex gap-3' href={"/profile"}>
+          <LucideMailWarning/> If you don&apos;t verify your email in 24 hours your account will be deleted.
+        </Link>
+      }
     </div>
   );
 }
