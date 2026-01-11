@@ -22,7 +22,7 @@ enum SupportLevel {
 model Provider {
   id           Int           @id @default(autoincrement())
   name         String
-  userId       String        @db.Uuid
+  userId       String
   website      String?
   supportLevel SupportLevel?
   notes        String?
@@ -115,44 +115,44 @@ model ApiContext {
 }
 
 model User {
-  id            String    @id @default(uuid()) @db.Uuid
+  id            String    @id
   name          String
-  email         String    @unique
+  email         String
   emailVerified Boolean   @default(false)
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
 
-  providers Provider[]
-  sessions  Session[]
-  accounts  Account[]
+  provider      Provider[]
 
+  @@unique([email])
   @@map("user")
 }
 
 model Session {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String   @id
   expiresAt DateTime
-  token     String   @unique
+  token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  @@unique([token])
   @@index([userId])
   @@map("session")
 }
 
 model Account {
-  id                    String    @id @default(uuid()) @db.Uuid
+  id                    String    @id
   accountId             String
   providerId            String
-  userId                String    @db.Uuid
+  userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -160,7 +160,6 @@ model Account {
   refreshTokenExpiresAt DateTime?
   scope                 String?
   password              String?
-
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
@@ -169,7 +168,7 @@ model Account {
 }
 
 model Verification {
-  id         String   @id @default(uuid()) @db.Uuid
+  id         String   @id
   identifier String
   value      String
   expiresAt  DateTime
@@ -179,4 +178,3 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
-

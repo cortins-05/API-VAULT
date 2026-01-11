@@ -14,7 +14,7 @@ CREATE TYPE "ContextType" AS ENUM ('RECOMMENDED', 'AVOID');
 CREATE TABLE "Provider" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
     "website" TEXT,
     "supportLevel" "SupportLevel",
     "notes" TEXT,
@@ -87,7 +87,7 @@ CREATE TABLE "ApiContext" (
 
 -- CreateTable
 CREATE TABLE "user" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
@@ -100,24 +100,24 @@ CREATE TABLE "user" (
 
 -- CreateTable
 CREATE TABLE "session" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
     "token" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "ipAddress" TEXT,
     "userAgent" TEXT,
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "session_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "account" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "accountId" TEXT NOT NULL,
     "providerId" TEXT NOT NULL,
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
     "accessToken" TEXT,
     "refreshToken" TEXT,
     "idToken" TEXT,
@@ -133,7 +133,7 @@ CREATE TABLE "account" (
 
 -- CreateTable
 CREATE TABLE "verification" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "identifier" TEXT NOT NULL,
     "value" TEXT NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
@@ -150,10 +150,10 @@ CREATE UNIQUE INDEX "ApiEvaluation_apiId_key" ON "ApiEvaluation"("apiId");
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "session_token_key" ON "session"("token");
+CREATE INDEX "session_userId_idx" ON "session"("userId");
 
 -- CreateIndex
-CREATE INDEX "session_userId_idx" ON "session"("userId");
+CREATE UNIQUE INDEX "session_token_key" ON "session"("token");
 
 -- CreateIndex
 CREATE INDEX "account_userId_idx" ON "account"("userId");
