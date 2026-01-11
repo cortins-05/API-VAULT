@@ -30,13 +30,13 @@ export function BotonesFinales({emailVerified}:Props){
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-5 md:gap-0 md:flex-row">
       {
         !emailVerified
         &&
         <Button size={"lg"} onClick={verificarEmail}>Verificate Email</Button>
       }
-      <Button variant={"destructive"} size={"lg"} className="ml-auto" onClick={borrarUsuario}>Delete Account</Button>
-    </>
+      <Button variant={"destructive"} size={"lg"} className="md:ml-auto" onClick={borrarUsuario}>Delete Account</Button>
+    </div>
   )
 }
