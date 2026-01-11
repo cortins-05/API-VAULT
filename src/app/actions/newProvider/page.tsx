@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import FormProvider from "./FormProvider";
 import { getUserId } from "@/actions/auth/getUserId";
 import ErrorAuthPage from "@/app/errorAuth/page";
