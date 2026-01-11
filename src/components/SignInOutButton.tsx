@@ -14,6 +14,7 @@ const SignInOutButton = () => {
   async function cerrarSesion(){
     await signOut();
     router.refresh();
+    router.push("/");
   }
 
   if(!useSession().data?.user){
