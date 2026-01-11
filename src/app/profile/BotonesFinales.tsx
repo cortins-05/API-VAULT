@@ -30,7 +30,7 @@ export function BotonesFinales({emailVerified}:Props){
   }
 
   return (
-    <div className="flex flex-col gap-5 md:gap-0 md:flex-row">
+    <div className="flex flex-col gap-5 md:justify-between md:flex-row w-full">
       {
         !emailVerified
         &&
