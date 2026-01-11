@@ -37,7 +37,7 @@ export type ProviderSumAggregateOutputType = {
 export type ProviderMinAggregateOutputType = {
   id: number | null
   name: string | null
-  user_id: string | null
+  userId: string | null
   website: string | null
   supportLevel: $Enums.SupportLevel | null
   notes: string | null
@@ -47,7 +47,7 @@ export type ProviderMinAggregateOutputType = {
 export type ProviderMaxAggregateOutputType = {
   id: number | null
   name: string | null
-  user_id: string | null
+  userId: string | null
   website: string | null
   supportLevel: $Enums.SupportLevel | null
   notes: string | null
@@ -57,7 +57,7 @@ export type ProviderMaxAggregateOutputType = {
 export type ProviderCountAggregateOutputType = {
   id: number
   name: number
-  user_id: number
+  userId: number
   website: number
   supportLevel: number
   notes: number
@@ -77,7 +77,7 @@ export type ProviderSumAggregateInputType = {
 export type ProviderMinAggregateInputType = {
   id?: true
   name?: true
-  user_id?: true
+  userId?: true
   website?: true
   supportLevel?: true
   notes?: true
@@ -87,7 +87,7 @@ export type ProviderMinAggregateInputType = {
 export type ProviderMaxAggregateInputType = {
   id?: true
   name?: true
-  user_id?: true
+  userId?: true
   website?: true
   supportLevel?: true
   notes?: true
@@ -97,7 +97,7 @@ export type ProviderMaxAggregateInputType = {
 export type ProviderCountAggregateInputType = {
   id?: true
   name?: true
-  user_id?: true
+  userId?: true
   website?: true
   supportLevel?: true
   notes?: true
@@ -194,7 +194,7 @@ export type ProviderGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type ProviderGroupByOutputType = {
   id: number
   name: string
-  user_id: string
+  userId: string
   website: string | null
   supportLevel: $Enums.SupportLevel | null
   notes: string | null
@@ -227,7 +227,7 @@ export type ProviderWhereInput = {
   NOT?: Prisma.ProviderWhereInput | Prisma.ProviderWhereInput[]
   id?: Prisma.IntFilter<"Provider"> | number
   name?: Prisma.StringFilter<"Provider"> | string
-  user_id?: Prisma.StringFilter<"Provider"> | string
+  userId?: Prisma.UuidFilter<"Provider"> | string
   website?: Prisma.StringNullableFilter<"Provider"> | string | null
   supportLevel?: Prisma.EnumSupportLevelNullableFilter<"Provider"> | $Enums.SupportLevel | null
   notes?: Prisma.StringNullableFilter<"Provider"> | string | null
@@ -239,7 +239,7 @@ export type ProviderWhereInput = {
 export type ProviderOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   supportLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -254,7 +254,7 @@ export type ProviderWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProviderWhereInput[]
   NOT?: Prisma.ProviderWhereInput | Prisma.ProviderWhereInput[]
   name?: Prisma.StringFilter<"Provider"> | string
-  user_id?: Prisma.StringFilter<"Provider"> | string
+  userId?: Prisma.UuidFilter<"Provider"> | string
   website?: Prisma.StringNullableFilter<"Provider"> | string | null
   supportLevel?: Prisma.EnumSupportLevelNullableFilter<"Provider"> | $Enums.SupportLevel | null
   notes?: Prisma.StringNullableFilter<"Provider"> | string | null
@@ -266,7 +266,7 @@ export type ProviderWhereUniqueInput = Prisma.AtLeast<{
 export type ProviderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   supportLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -284,7 +284,7 @@ export type ProviderScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProviderScalarWhereWithAggregatesInput | Prisma.ProviderScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Provider"> | number
   name?: Prisma.StringWithAggregatesFilter<"Provider"> | string
-  user_id?: Prisma.StringWithAggregatesFilter<"Provider"> | string
+  userId?: Prisma.UuidWithAggregatesFilter<"Provider"> | string
   website?: Prisma.StringNullableWithAggregatesFilter<"Provider"> | string | null
   supportLevel?: Prisma.EnumSupportLevelNullableWithAggregatesFilter<"Provider"> | $Enums.SupportLevel | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Provider"> | string | null
@@ -304,7 +304,7 @@ export type ProviderCreateInput = {
 export type ProviderUncheckedCreateInput = {
   id?: number
   name: string
-  user_id: string
+  userId: string
   website?: string | null
   supportLevel?: $Enums.SupportLevel | null
   notes?: string | null
@@ -325,7 +325,7 @@ export type ProviderUpdateInput = {
 export type ProviderUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supportLevel?: Prisma.NullableEnumSupportLevelFieldUpdateOperationsInput | $Enums.SupportLevel | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -336,7 +336,7 @@ export type ProviderUncheckedUpdateInput = {
 export type ProviderCreateManyInput = {
   id?: number
   name: string
-  user_id: string
+  userId: string
   website?: string | null
   supportLevel?: $Enums.SupportLevel | null
   notes?: string | null
@@ -354,7 +354,7 @@ export type ProviderUpdateManyMutationInput = {
 export type ProviderUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supportLevel?: Prisma.NullableEnumSupportLevelFieldUpdateOperationsInput | $Enums.SupportLevel | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -364,7 +364,7 @@ export type ProviderUncheckedUpdateManyInput = {
 export type ProviderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   website?: Prisma.SortOrder
   supportLevel?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -378,7 +378,7 @@ export type ProviderAvgOrderByAggregateInput = {
 export type ProviderMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   website?: Prisma.SortOrder
   supportLevel?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -388,7 +388,7 @@ export type ProviderMaxOrderByAggregateInput = {
 export type ProviderMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   website?: Prisma.SortOrder
   supportLevel?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -506,7 +506,7 @@ export type ProviderCreateWithoutApisInput = {
 export type ProviderUncheckedCreateWithoutApisInput = {
   id?: number
   name: string
-  user_id: string
+  userId: string
   website?: string | null
   supportLevel?: $Enums.SupportLevel | null
   notes?: string | null
@@ -541,7 +541,7 @@ export type ProviderUpdateWithoutApisInput = {
 export type ProviderUncheckedUpdateWithoutApisInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supportLevel?: Prisma.NullableEnumSupportLevelFieldUpdateOperationsInput | $Enums.SupportLevel | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -599,7 +599,7 @@ export type ProviderScalarWhereInput = {
   NOT?: Prisma.ProviderScalarWhereInput | Prisma.ProviderScalarWhereInput[]
   id?: Prisma.IntFilter<"Provider"> | number
   name?: Prisma.StringFilter<"Provider"> | string
-  user_id?: Prisma.StringFilter<"Provider"> | string
+  userId?: Prisma.UuidFilter<"Provider"> | string
   website?: Prisma.StringNullableFilter<"Provider"> | string | null
   supportLevel?: Prisma.EnumSupportLevelNullableFilter<"Provider"> | $Enums.SupportLevel | null
   notes?: Prisma.StringNullableFilter<"Provider"> | string | null
@@ -677,7 +677,7 @@ export type ProviderCountOutputTypeCountApisArgs<ExtArgs extends runtime.Types.E
 export type ProviderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  user_id?: boolean
+  userId?: boolean
   website?: boolean
   supportLevel?: boolean
   notes?: boolean
@@ -690,7 +690,7 @@ export type ProviderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type ProviderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  user_id?: boolean
+  userId?: boolean
   website?: boolean
   supportLevel?: boolean
   notes?: boolean
@@ -701,7 +701,7 @@ export type ProviderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type ProviderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  user_id?: boolean
+  userId?: boolean
   website?: boolean
   supportLevel?: boolean
   notes?: boolean
@@ -712,14 +712,14 @@ export type ProviderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type ProviderSelectScalar = {
   id?: boolean
   name?: boolean
-  user_id?: boolean
+  userId?: boolean
   website?: boolean
   supportLevel?: boolean
   notes?: boolean
   createdAt?: boolean
 }
 
-export type ProviderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "user_id" | "website" | "supportLevel" | "notes" | "createdAt", ExtArgs["result"]["provider"]>
+export type ProviderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "userId" | "website" | "supportLevel" | "notes" | "createdAt", ExtArgs["result"]["provider"]>
 export type ProviderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   apis?: boolean | Prisma.Provider$apisArgs<ExtArgs>
@@ -741,7 +741,7 @@ export type $ProviderPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
-    user_id: string
+    userId: string
     website: string | null
     supportLevel: $Enums.SupportLevel | null
     notes: string | null
@@ -1173,7 +1173,7 @@ export interface Prisma__ProviderClient<T, Null = never, ExtArgs extends runtime
 export interface ProviderFieldRefs {
   readonly id: Prisma.FieldRef<"Provider", 'Int'>
   readonly name: Prisma.FieldRef<"Provider", 'String'>
-  readonly user_id: Prisma.FieldRef<"Provider", 'String'>
+  readonly userId: Prisma.FieldRef<"Provider", 'String'>
   readonly website: Prisma.FieldRef<"Provider", 'String'>
   readonly supportLevel: Prisma.FieldRef<"Provider", 'SupportLevel'>
   readonly notes: Prisma.FieldRef<"Provider", 'String'>

@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 export async function getProviders(user_id:string) {
     return await prisma.provider.findMany({
         where: {
-            user_id
+            userId:user_id
         }
     });
 }

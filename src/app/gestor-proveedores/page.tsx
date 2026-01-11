@@ -17,7 +17,7 @@ export default async function GestorApisPage() {
 
   const providers = await prisma.provider.findMany({
     where: {
-      user_id: userId
+      userId
     }
   });
   
