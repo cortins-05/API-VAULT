@@ -1,22 +1,19 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { CalendarDays, Mail, CheckCircle2, XCircle } from "lucide-react";
+import { getSessionUser } from "@/actions/auth/getUserId";
 
 export default async function ProfilePage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
 
-  if(!session?.user){
-    redirect("/auth/register");
+  const user  = await getSessionUser();
+
+  if(!user){
+    redirect("/auth/login");
   }
 
-  const user = session.user;
   const createdDate = new Date(user.createdAt).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'long',

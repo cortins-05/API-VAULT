@@ -4,4 +4,4 @@ export const authClient = createAuthClient({
 	baseURL: process.env.BETTER_AUTH_URL // La URL base de tu servidor auth
 })
 
-export const {signIn, signUp, signOut, useSession} = authClient;
+export const {signIn, signUp, signOut, useSession, deleteUser} = authClient;

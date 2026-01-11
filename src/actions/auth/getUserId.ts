@@ -2,19 +2,47 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 export async function getUserId() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    });
-    if(!session?.user) return false;
+    try {
+        const headersList = await headers();
+        
+        const session = await auth.api.getSession({
+            headers: headersList,
+        });
 
-    return session.user.id.toString();
+        if (!session?.user) return null;
+        return session.user.id.toString();
+    } catch (error) {
+        console.error("Error al obtener userId:", error);
+        return null;
+    }
 }
 
 export async function getSession() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    });
+    try {
+        const headersList = await headers();
 
-    if(session) return true;
-    return false;
+        const session = await auth.api.getSession({
+            headers: headersList,
+        });
+
+        return session !== null && session !== undefined;
+    } catch (error) {
+        console.error("Error al obtener sesión:", error);
+        return false;
+    }
+}
+
+export async function getSessionUser() {
+    try {
+        const headersList = await headers();
+
+        const session = await auth.api.getSession({
+            headers: headersList,
+        });
+
+        return session?.user || null;
+    } catch (error) {
+        console.error("Error al obtener usuario de sesión:", error);
+        return null;
+    }
 }

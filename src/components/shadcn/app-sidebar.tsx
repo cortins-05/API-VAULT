@@ -33,12 +33,18 @@ type AppSidebarProps =
   React.ComponentProps<typeof Sidebar> & Props
 
 export async function AppSidebar({ data, ...props }: AppSidebarProps) {
+  try {
+    const headersList = await headers();
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+    const session = await auth.api.getSession({
+      headers: headersList,
+    });
 
-  const userImage = session?.user.image as string ;
+    if (!session?.user) {
+      return null;
+    }
+
+    const userImage = session?.user.image as string;
 
   return (
     <Sidebar {...props} className="h-full">
@@ -124,5 +130,9 @@ export async function AppSidebar({ data, ...props }: AppSidebarProps) {
       <SidebarRail />
       <SignInOutButton/>
     </Sidebar>
-  )
+    );
+  } catch (error) {
+    console.error("Error al cargar sidebar:", error);
+    return null;
+  }
 }

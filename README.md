@@ -4,6 +4,38 @@ Dashboard to catalog, evaluate, and monitor third‑party APIs. Combines AI‑as
 
 ![Sidebar+LandingPage](/photos/image1.png)
 
+## 🔐 ¡IMPORTANTE! Arreglo de Sesiones - v2.0
+
+> **Error Corregido:** RuntimeError "Headers is required" al cerrar sesión ✅
+>
+> Se han arreglado todos los problemas de sesión, inicio de sesión y cierre de sesión.
+> 
+> **Documentación:** Ver [README_DOCUMENTACION.md](README_DOCUMENTACION.md) para detalles completos.
+
+### ✅ Cambios Realizados
+- ✅ Logout funciona sin errores "Headers is required"
+- ✅ Protección de rutas con middleware
+- ✅ Manejo de errores mejorado con try-catch
+- ✅ Tipos de retorno consistentes
+- ✅ Mejor feedback visual durante logout
+- ✅ Logging de errores para debugging
+
+### 🚀 Inicio Rápido (Después del Arreglo)
+```bash
+npm run dev
+# o
+yarn dev
+```
+
+Luego prueba:
+1. Inicia sesión
+2. Click en "Logout"
+3. ✅ Debería redirigir a /auth/login sin errores
+
+**[Leer documentación completa →](README_DOCUMENTACION.md)**
+
+---
+
 ## Key Features
 - AI ingestion: extracts technical metadata from official docs (name, description, API type, auth, SDKs, pricing, confidence) with Zod validation and a repair retry if the AI returns invalid JSON.
 - Assisted create/edit flow: pre‑fills and lets humans correct before saving provider + API.

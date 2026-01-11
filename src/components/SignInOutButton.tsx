@@ -2,17 +2,29 @@
 
 import { logout } from "@/actions/auth/logout";
 import { Button } from "@/components/ui/button";
-import { signOut } from "better-auth/api";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function SignInOutButton() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function cerrarSesion() {
-    await logout();
-    await signOut();
-    router.refresh();
-    router.push("/");
+    try {
+      setIsLoading(true);
+      const result = await logout();
+      
+      if (result.success) {
+        router.refresh();
+        router.push("/auth/login");
+      } else {
+        console.error("Error al cerrar sesión:", result.error);
+      }
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -20,8 +32,9 @@ export default function SignInOutButton() {
       variant="destructive"
       onClick={cerrarSesion}
       className="cursor-pointer"
+      disabled={isLoading}
     >
-      Logout
+      {isLoading ? "Cerrando..." : "Logout"}
     </Button>
   );
 }
