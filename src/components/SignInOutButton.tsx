@@ -2,6 +2,7 @@
 
 import { logout } from "@/actions/auth/logout";
 import { Button } from "@/components/ui/button";
+import { signOut } from "better-auth/api";
 import { useRouter } from "next/navigation";
 
 export default function SignInOutButton() {
@@ -9,6 +10,8 @@ export default function SignInOutButton() {
 
   async function cerrarSesion() {
     await logout();
+    await signOut();
+    router.refresh();
     router.push("/");
   }
 
@@ -16,6 +19,7 @@ export default function SignInOutButton() {
     <Button
       variant="destructive"
       onClick={cerrarSesion}
+      className="cursor-pointer"
     >
       Logout
     </Button>
