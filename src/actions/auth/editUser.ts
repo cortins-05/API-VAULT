@@ -1,8 +1,25 @@
 "use server";
 
-import fs from "fs/promises";
-import path from "path";
+import { put, del } from "@vercel/blob";
 import { getSessionUser } from "./getUserId";
+
+function isVercelBlobUrl(url: string) {
+  try {
+    const u = new URL(url);
+    return (
+      u.hostname.endsWith("blob.vercel-storage.com") ||
+      u.hostname.endsWith("r2.dev") ||
+      u.hostname.includes("vercel-storage")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function getExtensionFromName(name: string) {
+  const parts = name.split(".");
+  return parts.length > 1 ? `.${parts.pop()}` : "";
+}
 
 export async function uploadPhotoAction(formData: FormData) {
   const file = formData.get("photo") as File | null;
@@ -14,33 +31,26 @@ export async function uploadPhotoAction(formData: FormData) {
   const user = await getSessionUser();
   if (!user) throw new Error("No autenticado");
 
-  const uploadDir = path.join(process.cwd(), "public/userPhotos");
-
-  
-  if (user.image) {
+  // Si la imagen anterior está en Vercel Blob, intentamos borrarla
+  if (user.image && isVercelBlobUrl(user.image)) {
     try {
-      
-      const oldFileName = path.basename(user.image);
-      const oldFilePath = path.join(uploadDir, oldFileName);
-
-      await fs.unlink(oldFilePath);
+      await del(user.image);
     } catch (err) {
-      
-      console.warn("No se pudo borrar la imagen anterior:", err);
+      console.warn("No se pudo borrar la imagen anterior en Blob:", err);
     }
   }
 
-  
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
+  // Subimos la nueva imagen a Vercel Blob (acceso público)
+  const ext = getExtensionFromName(file.name);
+  const blobPath = `userPhotos/${user.id}-${Date.now()}${ext}`;
 
-  const ext = file.name.split(".").pop();
-  const fileName = `${user.id}.${ext}`; 
-
-  await fs.mkdir(uploadDir, { recursive: true });
-  await fs.writeFile(path.join(uploadDir, fileName), buffer);
+  const res = await put(blobPath, file, {
+    access: "public",
+    contentType: file.type,
+    addRandomSuffix: false,
+  });
 
   return {
-    url: `/userPhotos/${fileName}`,
+    url: res.url,
   };
 }
