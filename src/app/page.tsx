@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { BackgroundPaths } from "@/components/shadcn/backgroundDinamic";
 
 export default function Home() {

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { emptyApiDraft } from "@/interfaces/gemini.interface";
 import FormConfirm from '@/components/CreateFormConfirm'
 import { getProviders } from "@/actions/prisma/create-provider";
