@@ -18,6 +18,10 @@ export default function FormProvider() {
 
     const router = useRouter();
 
+    if(!session.data?.user.id){
+        router.push("/");
+    }
+
     const emptyForm:Provider = {
         name: "",
         website: "",

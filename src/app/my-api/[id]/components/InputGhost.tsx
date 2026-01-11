@@ -22,7 +22,6 @@ export default function InputGhost({
         `
         flex h-9 w-full rounded-md
         bg-transparent
-        shadow-sm
         transition-colors
         placeholder:text-muted-foreground
         focus-visible:outline-none
