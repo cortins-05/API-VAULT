@@ -106,7 +106,7 @@ export default async function RootLayout({
                     {children}
                     <Toaster/>
                   </div>
-                  <footer className="w-full flex justify-end shrink-0 px-3">
+                  <footer className="fixed bottom-3 right-5">
                     <Footer />
                   </footer>
                 </div>
