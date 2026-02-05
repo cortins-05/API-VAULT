@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums"
 import type * as Prisma from "../internal/prismaNamespace"
 
@@ -233,10 +233,10 @@ export type AccountWhereInput = {
   AND?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
   OR?: Prisma.AccountWhereInput[]
   NOT?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
-  id?: Prisma.UuidFilter<"Account"> | string
+  id?: Prisma.StringFilter<"Account"> | string
   accountId?: Prisma.StringFilter<"Account"> | string
   providerId?: Prisma.StringFilter<"Account"> | string
-  userId?: Prisma.UuidFilter<"Account"> | string
+  userId?: Prisma.StringFilter<"Account"> | string
   accessToken?: Prisma.StringNullableFilter<"Account"> | string | null
   refreshToken?: Prisma.StringNullableFilter<"Account"> | string | null
   idToken?: Prisma.StringNullableFilter<"Account"> | string | null
@@ -273,7 +273,7 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
   accountId?: Prisma.StringFilter<"Account"> | string
   providerId?: Prisma.StringFilter<"Account"> | string
-  userId?: Prisma.UuidFilter<"Account"> | string
+  userId?: Prisma.StringFilter<"Account"> | string
   accessToken?: Prisma.StringNullableFilter<"Account"> | string | null
   refreshToken?: Prisma.StringNullableFilter<"Account"> | string | null
   idToken?: Prisma.StringNullableFilter<"Account"> | string | null
@@ -309,10 +309,10 @@ export type AccountScalarWhereWithAggregatesInput = {
   AND?: Prisma.AccountScalarWhereWithAggregatesInput | Prisma.AccountScalarWhereWithAggregatesInput[]
   OR?: Prisma.AccountScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AccountScalarWhereWithAggregatesInput | Prisma.AccountScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"Account"> | string
+  id?: Prisma.StringWithAggregatesFilter<"Account"> | string
   accountId?: Prisma.StringWithAggregatesFilter<"Account"> | string
   providerId?: Prisma.StringWithAggregatesFilter<"Account"> | string
-  userId?: Prisma.UuidWithAggregatesFilter<"Account"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"Account"> | string
   accessToken?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
   refreshToken?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
   idToken?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
@@ -325,7 +325,7 @@ export type AccountScalarWhereWithAggregatesInput = {
 }
 
 export type AccountCreateInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   accessToken?: string | null
@@ -341,7 +341,7 @@ export type AccountCreateInput = {
 }
 
 export type AccountUncheckedCreateInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   userId: string
@@ -389,7 +389,7 @@ export type AccountUncheckedUpdateInput = {
 }
 
 export type AccountCreateManyInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   userId: string
@@ -536,7 +536,7 @@ export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type AccountCreateWithoutUserInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   accessToken?: string | null
@@ -551,7 +551,7 @@ export type AccountCreateWithoutUserInput = {
 }
 
 export type AccountUncheckedCreateWithoutUserInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   accessToken?: string | null
@@ -595,10 +595,10 @@ export type AccountScalarWhereInput = {
   AND?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
   OR?: Prisma.AccountScalarWhereInput[]
   NOT?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Account"> | string
+  id?: Prisma.StringFilter<"Account"> | string
   accountId?: Prisma.StringFilter<"Account"> | string
   providerId?: Prisma.StringFilter<"Account"> | string
-  userId?: Prisma.UuidFilter<"Account"> | string
+  userId?: Prisma.StringFilter<"Account"> | string
   accessToken?: Prisma.StringNullableFilter<"Account"> | string | null
   refreshToken?: Prisma.StringNullableFilter<"Account"> | string | null
   idToken?: Prisma.StringNullableFilter<"Account"> | string | null
@@ -611,7 +611,7 @@ export type AccountScalarWhereInput = {
 }
 
 export type AccountCreateManyUserInput = {
-  id?: string
+  id: string
   accountId: string
   providerId: string
   accessToken?: string | null

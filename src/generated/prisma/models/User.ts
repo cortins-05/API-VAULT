@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums"
 import type * as Prisma from "../internal/prismaNamespace"
 
@@ -191,16 +191,16 @@ export type UserWhereInput = {
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  id?: Prisma.UuidFilter<"User"> | string
+  id?: Prisma.StringFilter<"User"> | string
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  providers?: Prisma.ProviderListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  provider?: Prisma.ProviderListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -211,9 +211,9 @@ export type UserOrderByWithRelationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  providers?: Prisma.ProviderOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
+  provider?: Prisma.ProviderOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -227,9 +227,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   image?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  providers?: Prisma.ProviderListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  provider?: Prisma.ProviderListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -249,7 +249,7 @@ export type UserScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"User"> | string
+  id?: Prisma.StringWithAggregatesFilter<"User"> | string
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -259,29 +259,29 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  providers?: Prisma.ProviderCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  provider?: Prisma.ProviderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  providers?: Prisma.ProviderUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  provider?: Prisma.ProviderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -292,9 +292,9 @@ export type UserUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  providers?: Prisma.ProviderUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  provider?: Prisma.ProviderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -305,13 +305,13 @@ export type UserUncheckedUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  providers?: Prisma.ProviderUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  provider?: Prisma.ProviderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -375,18 +375,18 @@ export type UserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type UserCreateNestedOneWithoutProvidersInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutProvidersInput, Prisma.UserUncheckedCreateWithoutProvidersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProvidersInput
+export type UserCreateNestedOneWithoutProviderInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProviderInput, Prisma.UserUncheckedCreateWithoutProviderInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProviderInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutProvidersNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutProvidersInput, Prisma.UserUncheckedCreateWithoutProvidersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProvidersInput
-  upsert?: Prisma.UserUpsertWithoutProvidersInput
+export type UserUpdateOneRequiredWithoutProviderNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProviderInput, Prisma.UserUncheckedCreateWithoutProviderInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProviderInput
+  upsert?: Prisma.UserUpsertWithoutProviderInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProvidersInput, Prisma.UserUpdateWithoutProvidersInput>, Prisma.UserUncheckedUpdateWithoutProvidersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProviderInput, Prisma.UserUpdateWithoutProviderInput>, Prisma.UserUncheckedUpdateWithoutProviderInput>
 }
 
 export type UserCreateNestedOneWithoutSessionsInput = {
@@ -417,8 +417,8 @@ export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
-export type UserCreateWithoutProvidersInput = {
-  id?: string
+export type UserCreateWithoutProviderInput = {
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -429,8 +429,8 @@ export type UserCreateWithoutProvidersInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutProvidersInput = {
-  id?: string
+export type UserUncheckedCreateWithoutProviderInput = {
+  id: string
   name: string
   email: string
   emailVerified?: boolean
@@ -441,23 +441,23 @@ export type UserUncheckedCreateWithoutProvidersInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutProvidersInput = {
+export type UserCreateOrConnectWithoutProviderInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutProvidersInput, Prisma.UserUncheckedCreateWithoutProvidersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProviderInput, Prisma.UserUncheckedCreateWithoutProviderInput>
 }
 
-export type UserUpsertWithoutProvidersInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutProvidersInput, Prisma.UserUncheckedUpdateWithoutProvidersInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutProvidersInput, Prisma.UserUncheckedCreateWithoutProvidersInput>
+export type UserUpsertWithoutProviderInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProviderInput, Prisma.UserUncheckedUpdateWithoutProviderInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProviderInput, Prisma.UserUncheckedCreateWithoutProviderInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutProvidersInput = {
+export type UserUpdateToOneWithWhereWithoutProviderInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutProvidersInput, Prisma.UserUncheckedUpdateWithoutProvidersInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProviderInput, Prisma.UserUncheckedUpdateWithoutProviderInput>
 }
 
-export type UserUpdateWithoutProvidersInput = {
+export type UserUpdateWithoutProviderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -469,7 +469,7 @@ export type UserUpdateWithoutProvidersInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutProvidersInput = {
+export type UserUncheckedUpdateWithoutProviderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -482,27 +482,27 @@ export type UserUncheckedUpdateWithoutProvidersInput = {
 }
 
 export type UserCreateWithoutSessionsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  providers?: Prisma.ProviderCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  provider?: Prisma.ProviderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  providers?: Prisma.ProviderUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  provider?: Prisma.ProviderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -529,8 +529,8 @@ export type UserUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  providers?: Prisma.ProviderUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  provider?: Prisma.ProviderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -541,32 +541,32 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  providers?: Prisma.ProviderUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  provider?: Prisma.ProviderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  providers?: Prisma.ProviderCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  provider?: Prisma.ProviderCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
-  id?: string
+  id: string
   name: string
   email: string
   emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  providers?: Prisma.ProviderUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  provider?: Prisma.ProviderUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -593,8 +593,8 @@ export type UserUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  providers?: Prisma.ProviderUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  provider?: Prisma.ProviderUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -605,8 +605,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  providers?: Prisma.ProviderUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  provider?: Prisma.ProviderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -615,15 +615,15 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
  */
 
 export type UserCountOutputType = {
-  providers: number
   sessions: number
   accounts: number
+  provider: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  providers?: boolean | UserCountOutputTypeCountProvidersArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
+  provider?: boolean | UserCountOutputTypeCountProviderArgs
 }
 
 /**
@@ -634,13 +634,6 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ProviderWhereInput
 }
 
 /**
@@ -657,6 +650,13 @@ export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.AccountWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProviderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProviderWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -666,9 +666,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   image?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  providers?: boolean | Prisma.User$providersArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  provider?: boolean | Prisma.User$providerArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -704,9 +704,9 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  providers?: boolean | Prisma.User$providersArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  provider?: boolean | Prisma.User$providerArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -715,9 +715,9 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    providers: Prisma.$ProviderPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
+    provider: Prisma.$ProviderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1121,9 +1121,9 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  providers<T extends Prisma.User$providersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$providersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  provider<T extends Prisma.User$providerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$providerArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1548,30 +1548,6 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.providers
- */
-export type User$providersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Provider
-   */
-  select?: Prisma.ProviderSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Provider
-   */
-  omit?: Prisma.ProviderOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProviderInclude<ExtArgs> | null
-  where?: Prisma.ProviderWhereInput
-  orderBy?: Prisma.ProviderOrderByWithRelationInput | Prisma.ProviderOrderByWithRelationInput[]
-  cursor?: Prisma.ProviderWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ProviderScalarFieldEnum | Prisma.ProviderScalarFieldEnum[]
-}
-
-/**
  * User.sessions
  */
 export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1617,6 +1593,30 @@ export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
+}
+
+/**
+ * User.provider
+ */
+export type User$providerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Provider
+   */
+  select?: Prisma.ProviderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Provider
+   */
+  omit?: Prisma.ProviderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProviderInclude<ExtArgs> | null
+  where?: Prisma.ProviderWhereInput
+  orderBy?: Prisma.ProviderOrderByWithRelationInput | Prisma.ProviderOrderByWithRelationInput[]
+  cursor?: Prisma.ProviderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProviderScalarFieldEnum | Prisma.ProviderScalarFieldEnum[]
 }
 
 /**

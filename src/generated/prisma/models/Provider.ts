@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums"
 import type * as Prisma from "../internal/prismaNamespace"
 
@@ -227,7 +227,7 @@ export type ProviderWhereInput = {
   NOT?: Prisma.ProviderWhereInput | Prisma.ProviderWhereInput[]
   id?: Prisma.IntFilter<"Provider"> | number
   name?: Prisma.StringFilter<"Provider"> | string
-  userId?: Prisma.UuidFilter<"Provider"> | string
+  userId?: Prisma.StringFilter<"Provider"> | string
   website?: Prisma.StringNullableFilter<"Provider"> | string | null
   supportLevel?: Prisma.EnumSupportLevelNullableFilter<"Provider"> | $Enums.SupportLevel | null
   notes?: Prisma.StringNullableFilter<"Provider"> | string | null
@@ -254,7 +254,7 @@ export type ProviderWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProviderWhereInput[]
   NOT?: Prisma.ProviderWhereInput | Prisma.ProviderWhereInput[]
   name?: Prisma.StringFilter<"Provider"> | string
-  userId?: Prisma.UuidFilter<"Provider"> | string
+  userId?: Prisma.StringFilter<"Provider"> | string
   website?: Prisma.StringNullableFilter<"Provider"> | string | null
   supportLevel?: Prisma.EnumSupportLevelNullableFilter<"Provider"> | $Enums.SupportLevel | null
   notes?: Prisma.StringNullableFilter<"Provider"> | string | null
@@ -284,7 +284,7 @@ export type ProviderScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProviderScalarWhereWithAggregatesInput | Prisma.ProviderScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Provider"> | number
   name?: Prisma.StringWithAggregatesFilter<"Provider"> | string
-  userId?: Prisma.UuidWithAggregatesFilter<"Provider"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"Provider"> | string
   website?: Prisma.StringNullableWithAggregatesFilter<"Provider"> | string | null
   supportLevel?: Prisma.EnumSupportLevelNullableWithAggregatesFilter<"Provider"> | $Enums.SupportLevel | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"Provider"> | string | null
@@ -297,7 +297,7 @@ export type ProviderCreateInput = {
   supportLevel?: $Enums.SupportLevel | null
   notes?: string | null
   createdAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutProvidersInput
+  user: Prisma.UserCreateNestedOneWithoutProviderInput
   apis?: Prisma.ApiCreateNestedManyWithoutProviderInput
 }
 
@@ -318,7 +318,7 @@ export type ProviderUpdateInput = {
   supportLevel?: Prisma.NullableEnumSupportLevelFieldUpdateOperationsInput | $Enums.SupportLevel | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutProvidersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProviderNestedInput
   apis?: Prisma.ApiUpdateManyWithoutProviderNestedInput
 }
 
@@ -500,7 +500,7 @@ export type ProviderCreateWithoutApisInput = {
   supportLevel?: $Enums.SupportLevel | null
   notes?: string | null
   createdAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutProvidersInput
+  user: Prisma.UserCreateNestedOneWithoutProviderInput
 }
 
 export type ProviderUncheckedCreateWithoutApisInput = {
@@ -535,7 +535,7 @@ export type ProviderUpdateWithoutApisInput = {
   supportLevel?: Prisma.NullableEnumSupportLevelFieldUpdateOperationsInput | $Enums.SupportLevel | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutProvidersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProviderNestedInput
 }
 
 export type ProviderUncheckedUpdateWithoutApisInput = {
@@ -599,7 +599,7 @@ export type ProviderScalarWhereInput = {
   NOT?: Prisma.ProviderScalarWhereInput | Prisma.ProviderScalarWhereInput[]
   id?: Prisma.IntFilter<"Provider"> | number
   name?: Prisma.StringFilter<"Provider"> | string
-  userId?: Prisma.UuidFilter<"Provider"> | string
+  userId?: Prisma.StringFilter<"Provider"> | string
   website?: Prisma.StringNullableFilter<"Provider"> | string | null
   supportLevel?: Prisma.EnumSupportLevelNullableFilter<"Provider"> | $Enums.SupportLevel | null
   notes?: Prisma.StringNullableFilter<"Provider"> | string | null
