@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react"
 
 export const authClient = createAuthClient({
-	baseURL: "/api/auth" // Usamos el proxy de Next.js para mantener el mismo origen
+	baseURL: process.env.BETTER_AUTH_URL // La URL base de tu servidor auth
 })
 
 export const {signIn, signUp, signOut, useSession, deleteUser } = authClient;

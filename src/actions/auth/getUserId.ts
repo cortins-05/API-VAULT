@@ -1,13 +1,9 @@
 import { auth } from "@/lib/auth";
-import { getSessionCookie } from "better-auth/cookies";
 import { headers } from "next/headers";
 
 export async function getUserId() {
     try {
         const headersList = await headers();
-        if (!getSessionCookie(headersList)) {
-            return null;
-        }
         
         const session = await auth.api.getSession({
             headers: headersList,
@@ -24,9 +20,6 @@ export async function getUserId() {
 export async function getSession() {
     try {
         const headersList = await headers();
-        if (!getSessionCookie(headersList)) {
-            return false;
-        }
 
         const session = await auth.api.getSession({
             headers: headersList,
@@ -42,9 +35,6 @@ export async function getSession() {
 export async function getSessionUser() {
     try {
         const headersList = await headers();
-        if (!getSessionCookie(headersList)) {
-            return null;
-        }
 
         const session = await auth.api.getSession({
             headers: headersList,
